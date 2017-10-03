@@ -69,16 +69,14 @@ export default class LogInScreen extends Component {
           <TextInput
             style={LogInStyle.bodyElement}
             value={this.state.username}
-            onChangeText={(text) => { logInStore.dispatch({ type: 'ADD_USERNAME', value: text }) } }
-          />
+            onChangeText={(text) => { logInStore.dispatch({ type: 'ADD_USERNAME', value: text }) } }/>
 
           <Text style={LogInStyle.bodyElement}>Password:</Text>
           <TextInput
             style={LogInStyle.bodyElement}
             secureTextEntry={true}
             value={this.state.password}
-            onChangeText={(text) => { logInStore.dispatch({ type: 'ADD_PASSWORD', value: text }) } }
-          />
+            onChangeText={(text) => { logInStore.dispatch({ type: 'ADD_PASSWORD', value: text }) } }/>
 
           <Text style={LogInStyle.bodyElement}>{this.state.error}</Text>
 
