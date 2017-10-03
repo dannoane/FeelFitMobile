@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TextInput, Button } from 'react-native';
+
+import SignUpStyle from './../Style/SignUpStyle';
 
 export default class SignUpScreen extends Component {
 
@@ -10,13 +12,58 @@ export default class SignUpScreen extends Component {
   constructor(props) {
 
     super(props);
-    const { navigate } = this.props.navigation;
+
+    this.state = {
+      name: '',
+      username: '',
+      password: '',
+      email: '',
+    };
   }
 
   render() {
-    return (
-      <View>
 
+    const { navigate } = this.props.navigation;
+
+    return (
+      <View style={SignUpStyle.page}>
+        <View style={SignUpStyle.header}>
+          <Text>Sign Up</Text>
+        </View>
+
+        <View style={SignUpStyle.body}>
+          <Text style={SignUpStyle.bodyElement}>Name:</Text>
+          <TextInput
+            style={SignUpStyle.bodyElement}
+            value={this.state.name}
+            onChangeText={() => {}}/>
+
+          <Text style={SignUpStyle.bodyElement}>Username:</Text>
+          <TextInput
+            style={SignUpStyle.bodyElement}
+            value={this.state.username}
+            onChangeText={() => {}}/>
+
+          <Text style={SignUpStyle.bodyElement}>Password:</Text>
+          <TextInput
+            style={SignUpStyle.bodyElement}
+            secureTextEntry={true}
+            value={this.state.password}
+            onChangeText={() => {}}/>
+
+          <Text style={SignUpStyle.bodyElement}>Email:</Text>
+          <TextInput
+            style={SignUpStyle.bodyElement}
+            value={this.state.email}
+            onChangeText={() => {}}/>
+        </View>
+
+        <View style={SignUpStyle.footer}>
+          <Button
+            title="Send"
+            onPress={() => {}}>
+          </Button>
+        </View>
       </View>
     );
   }
