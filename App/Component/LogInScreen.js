@@ -1,32 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-import { createStore } from 'redux';
 
 import LogInStyle from './../Style/LogInStyle';
 import LogInService from './../Service/LogInService';
 
-
-const logInReducer = (state = {}, action) => {
-
-  switch (action.type) {
-    case 'ADD_USERNAME':
-      return Object.assign({}, state, { username: action.value });
-    case 'ADD_PASSWORD':
-      return Object.assign({}, state, { password: action.value });
-    case 'ADD_ERROR':
-      return { username: '', password: '', error: action.value };
-    default:
-      return state;
-  }
-};
-
-const logInStore = createStore(logInReducer);
-
 export default class LogInScreen extends Component {
-
-  static navigationOptions = {
-    title: 'Log In',
-  };
 
   constructor(props) {
 
@@ -35,19 +13,20 @@ export default class LogInScreen extends Component {
     const me = this;
 
     this.logInService = new LogInService();
-    this.state = { username: '', password: '', error: '' };
-    logInStore.subscribe(() => me.setState(logInStore.getState()));
+    this.state = {
+      username: '',
+      password: '',
+      error: ''
+    };
   }
 
-  async logIn() {
+  async _logIn() {
 
-    let result = await this.logInService.logIn(
-      logInStore.getState().username,
-      logInStore.getState().password
-    );
+    let { username, password } = this.state;
+    let result = await this.logInService.logIn(username, password);
 
     if (!result.success) {
-      logInStore.dispatch({ type: 'ADD_ERROR', value: result.message });
+      this.setState({ 'username': '', password: '', error: result.message });
     }
     else {
 
@@ -69,20 +48,20 @@ export default class LogInScreen extends Component {
           <TextInput
             style={LogInStyle.bodyElement}
             value={this.state.username}
-            onChangeText={(text) => { logInStore.dispatch({ type: 'ADD_USERNAME', value: text }) } }/>
+            onChangeText={(text) => { this.setState({ username: text }) } }/>
 
           <Text style={LogInStyle.bodyElement}>Password:</Text>
           <TextInput
             style={LogInStyle.bodyElement}
             secureTextEntry={true}
             value={this.state.password}
-            onChangeText={(text) => { logInStore.dispatch({ type: 'ADD_PASSWORD', value: text }) } }/>
+            onChangeText={(text) => { this.setState({ password: text }) } }/>
 
           <Text style={LogInStyle.bodyElement}>{this.state.error}</Text>
 
           <Button
             title="Log  In"
-            onPress={() => { this.logIn(); }}
+            onPress={() => { this._logIn(); }}
           />
         </View>
 
