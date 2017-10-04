@@ -1,4 +1,3 @@
-import Storage from './../Util/Storage';
 import axios from 'axios';
 
 import * as config from './../config';
