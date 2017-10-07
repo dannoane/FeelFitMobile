@@ -16,7 +16,8 @@ export default class LogInScreen extends Component {
     this.state = {
       username: '',
       password: '',
-      error: ''
+      error: '',
+      message: this.props.signedUp ? 'Successfully signed up!' : ''
     };
   }
 
@@ -70,6 +71,8 @@ export default class LogInScreen extends Component {
             title="Sign Up"
             onPress={() => { navigate('SignUp') }}>
           </Button>
+
+          <Text>{this.state.message}</Text>
         </View>
       </View>
     );
