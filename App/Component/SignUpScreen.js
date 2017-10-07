@@ -24,7 +24,7 @@ export default class SignUpScreen extends Component {
     };
   }
 
-  _signUp() {
+  async _signUp() {
 
     let { name, username, password, repassword, email } = this.state;
     let validationResult = this.service.validate({ name, username, password, repassword, email });
@@ -35,6 +35,14 @@ export default class SignUpScreen extends Component {
     }
 
     this.setState({ error: '' });
+
+    let result = await this.service.signUp({ name, username, password, email });
+    if (result.success) {
+      this.props.navigation.navigate('LogIn', { signedUp: true });
+    }
+    else {
+      this.setState({ error: result.message });
+    }
   }
 
   render() {

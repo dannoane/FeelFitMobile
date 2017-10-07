@@ -16,7 +16,7 @@ export default class SignUpService {
 
   _validatePassword(password, repassword) {
 
-    return password.length >= 8 && password === repassword;
+    return password.length >= 6 && password === repassword;
   }
 
   _validateEmail(email) {
@@ -43,7 +43,7 @@ export default class SignUpService {
     if (!this._validatePassword(user.password, user.repassword)) {
       return {
         valid: false,
-        message: 'The passwords must match and be at least 8 characters long'
+        message: 'The passwords must match and be at least 6 characters long'
       }
     }
 
@@ -57,8 +57,19 @@ export default class SignUpService {
     return { valid: true };
   }
 
-  signUp (user) {
+  async signUp (user) {
 
+    try {
+      let result = await axios.post(config.api + '/api/v1/signup', { user });
 
+      return result.data;
+    }
+    catch (err) {
+      if (err.response.status !== 500) {
+          return err.response.data;
+      }
+
+      return { success: false, message: 'Cannot reach server!' };
+    }
   }
 }
