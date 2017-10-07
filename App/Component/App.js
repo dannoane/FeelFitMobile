@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-
-import LogInScreen from './App/Component/LogInScreen';
-import SignUpScreen from './App/Component/SignUpScreen';
+import LogInContainer from './../Container/LogInContainer';
+import SignUpScreen from './SignUpScreen';
+import PropTypes from 'prop-types';
 
 const mapNavigationStateParamsToProps = (SomeComponent) => {
   return class extends Component {
@@ -16,11 +15,11 @@ const mapNavigationStateParamsToProps = (SomeComponent) => {
 }
 
 const App = StackNavigator({
-  LogIn: { screen: mapNavigationStateParamsToProps(LogInScreen) },
+  LogIn: { screen: mapNavigationStateParamsToProps(LogInContainer) },
   SignUp: { screen: mapNavigationStateParamsToProps(SignUpScreen) },
 },
 {
   headerMode: 'none'
 });
 
-AppRegistry.registerComponent('BikeAppMobile', () => App);
+export default App;

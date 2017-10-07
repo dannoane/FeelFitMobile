@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-
+import PropTypes from 'prop-types';
 import LogInStyle from './../Style/LogInStyle';
 import LogInService from './../Service/LogInService';
 
@@ -9,8 +9,6 @@ export default class LogInScreen extends Component {
   constructor(props) {
 
     super(props);
-
-    const me = this;
 
     this.logInService = new LogInService();
     this.state = {
