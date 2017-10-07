@@ -8,13 +8,17 @@ export default class LogInService {
 
     try {
       let result = await axios.post(config.api + '/api/v1/authenticate', {
-          username: username,
-          password: password,
+          username,
+          password
       });
 
-      return result;
+      return result.data;
     }
     catch (err) {
+      if (err.response.status !== 500) {
+          return err.response.data;
+      }
+
       return { success: false, message: 'Cannot reach server!'};
     }
   }
