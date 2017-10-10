@@ -19,6 +19,14 @@ export default class LogInScreen extends Component {
     };
   }
 
+  componentWillMount() {
+
+    const { navigate } = this.props.navigation;
+    if (this.props.loggedIn) {
+      navigate('Main');
+    }
+  }
+
   async _logIn() {
 
     let { username, password } = this.state;
@@ -28,7 +36,8 @@ export default class LogInScreen extends Component {
       this.setState({ 'username': '', password: '', error: result.message });
     }
     else {
-
+      this.props.onLogIn(true);
+      this.props.onAccessToken(result.token);
     }
   }
 

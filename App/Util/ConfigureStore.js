@@ -3,7 +3,7 @@ import { createStore } from 'redux';
 import UserState from './../Reducer/UserState';
 
 const loadState = () => {
-  return {};
+  return { loggedIn: true };
 };
 
 const saveState = (state) => {

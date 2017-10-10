@@ -15,7 +15,7 @@ export default class LogInService {
       return result.data;
     }
     catch (err) {
-      if (err.response.status !== 500) {
+      if (err.response && rr.response.status !== 500) {
           return err.response.data;
       }
 
