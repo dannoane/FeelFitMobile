@@ -1,3 +1,6 @@
+Noane Dan
+ndie1968@scs.ubbcluj.ro
+
 # BikeAppMobile
 
 The goal is to create an app that tracks the user's route when biking/running.
