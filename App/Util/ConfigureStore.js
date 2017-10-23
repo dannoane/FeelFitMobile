@@ -1,9 +1,10 @@
 import throttle from 'lodash/throttle';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import UserState from './../Reducer/UserState';
+import UserPosition from './../Reducer/UserPosition';
 
 const loadState = () => {
-  return { loggedIn: true };
+  return { UserState: { loggedIn: true } };
 };
 
 const saveState = (state) => {
@@ -13,7 +14,11 @@ const saveState = (state) => {
 const ConfigureStore = () => {
 
   const persistedState = loadState();
-  const store = createStore(UserState, persistedState);
+  const bikeApp = combineReducers({
+    UserState: UserState,
+    UserPosition: UserPosition
+  });
+  const store = createStore(bikeApp, persistedState);
 
   store.subscribe(throttle(() => {
     saveState(store.getState());

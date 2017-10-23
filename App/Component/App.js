@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { StackNavigator, DrawerNavigator, NavigationActions } from 'react-navigation';
+import { StackNavigator, DrawerNavigator, NavigationActions, TabNavigator } from 'react-navigation';
 import LogInContainer from './../Container/LogInContainer';
 import SignUpScreen from './SignUpScreen';
-import HomeScreen from './HomeScreen';
+import HomeContainer from './../Container/HomeContainer';
+import MapContainer from './../Container/MapContainer';
 
 
 const mapNavigationStateParamsToProps = (SomeComponent) => {
@@ -15,14 +16,22 @@ const mapNavigationStateParamsToProps = (SomeComponent) => {
   }
 }
 
+const Home = TabNavigator({
+  Home: { screen: mapNavigationStateParamsToProps(HomeContainer) },
+  Map: { screen: mapNavigationStateParamsToProps(MapContainer) }
+}, {
+  tabBarPosition: 'bottom',
+  animationEnabled: true,
+});
+
 const Main = DrawerNavigator({
-  Home: { screen: mapNavigationStateParamsToProps(HomeScreen) }
+  Home: { screen: Home }
 });
 
 const App = StackNavigator({
   LogIn: { screen: mapNavigationStateParamsToProps(LogInContainer) },
   SignUp: { screen: mapNavigationStateParamsToProps(SignUpScreen) },
-  Main: { screen: mapNavigationStateParamsToProps(HomeScreen) }
+  Main: { screen: Main }
 },
 {
   headerMode: 'none',

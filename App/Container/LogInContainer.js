@@ -3,7 +3,7 @@ import { setLogInStatus, setAccessToken } from './../Action';
 import LogInScreen from './../Component/LogInScreen';
 
 const mapStateToProps = (state) => ({
-  loggedIn: state.loggedIn
+  loggedIn: state.UserState.loggedIn
 });
 
 const mapDispatchToProps = {
