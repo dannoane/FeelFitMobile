@@ -8,6 +8,17 @@ export default class Home extends React.Component {
   constructor(props) {
 
     super(props);
+
+    this._initTimer();
+  }
+
+  _initTimer() {
+
+    setInterval(() => {
+      if (this.props.watchPosition) {
+        this.props.onTimeTick();
+      }
+    }, 1000);
   }
 
   componentWillUnmount() {
@@ -33,7 +44,7 @@ export default class Home extends React.Component {
       (error) => {
         this.getCurrentPosition(!highAccuracy);
       },
-      { enableHighAccuracy: highAccuracy, timeout: 10000, maximumAge: 1000 }
+      { enableHighAccuracy: highAccuracy, timeout: 20000, maximumAge: 1000 }
     );
   }
 
@@ -47,14 +58,14 @@ export default class Home extends React.Component {
         (error) => {
           this.watchPosition(!highAccuracy);
         },
-        { enableHighAccuracy: highAccuracy, timeout: 10000, maximumAge: 1000, distanceFilter: 5 }
+        { enableHighAccuracy: highAccuracy, timeout: 20000, maximumAge: 1000, distanceFilter: 5 }
       );
     }
   }
 
-  trackUser(highAccuracy = true) {
+  trackUser(watch, highAccuracy = true) {
 
-    if (this.watchPosition) {
+    if (watch) {
       this.getCurrentPosition();
       this.watchPosition();
     }
@@ -70,7 +81,7 @@ export default class Home extends React.Component {
         <View style={HomeStyle.controllers}>
           <TouchableOpacity
             style={HomeStyle.controller}
-            onPress={() => { this.props.onWatchPosition(!this.props.watchPosition); this.trackUser(); }}
+            onPress={() => { this.props.onWatchPosition(!this.props.watchPosition); this.trackUser(!this.props.watchPosition); }}
           >
             <Text style={HomeStyle.gridText}>{this.props.watchPosition ? "Pause" : "Start"}</Text>
           </TouchableOpacity>
@@ -93,7 +104,7 @@ export default class Home extends React.Component {
         </View>
 
         <View style={HomeStyle.grid}>
-          <Text style={HomeStyle.gridText}>00:00:00</Text>
+          <Text style={HomeStyle.gridText}>{this.props.time}</Text>
         </View>
 
         <View style={HomeStyle.smallGrid}>
@@ -106,7 +117,7 @@ export default class Home extends React.Component {
         </View>
         <View style={HomeStyle.smallGrid}>
           <Text style={HomeStyle.gridText}>Average speed: {this.props.avgSpeed}</Text>
-          <Text style={HomeStyle.gridText}>Average pace: 4 min/km</Text>
+          <Text style={HomeStyle.gridText}>Average pace: {this.props.avgPace}</Text>
         </View>
       </View>
     );

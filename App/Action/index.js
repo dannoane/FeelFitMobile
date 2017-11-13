@@ -28,3 +28,8 @@ export const setWatchPosition = (watchPosition) => ({
   type: 'SET_WATCH_POSITION',
   value: watchPosition
 })
+
+export const incrementTime = () => ({
+  type: 'INCREMENT_TIME',
+  value: 1
+});

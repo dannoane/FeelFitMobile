@@ -41,7 +41,6 @@ const App = StackNavigator({
 });
 
 const defaultGetStateForAction = App.router.getStateForAction;
-
 App.router.getStateForAction = (action, state) => {
 
   if (
@@ -56,6 +55,5 @@ App.router.getStateForAction = (action, state) => {
 
   return defaultGetStateForAction(action, state);
 };
-
 
 export default App;

@@ -37,18 +37,21 @@ export default class Map extends React.Component {
 
     return (
         <MapView
-          style={styles.map}
-          region={region}>
+          style={styles.map}>
 
           <MapView.Marker
             coordinate={coords}/>
 
           {route.map(segment => {
-            <MapView.Polyline
+            if (segment.length < 2) {
+              return;
+            }
+
+            return <MapView.Polyline
               strokeWidth={3}
               strokeColor={'#008efd'}
-              coordinates={segment.toArray()}
-              geodesic={true}/>
+              coordinates={segment}
+              geodesic={true} />
           })}
         </MapView>
     );
