@@ -1,22 +1,28 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
-import { Icon } from 'react-native-elements'
+import { View, Text, TouchableOpacity } from 'react-native';
 import HomeStyle from './../Style/HomeStyle';
+import WorkoutModel from './../Model/Workout';
 
-export default class Home extends React.Component {
+export default class Workout extends Component {
 
   constructor(props) {
 
     super(props);
 
+    this.state = {
+      workout: new WorkoutModel(),
+    };
     this._initTimer();
   }
 
   _initTimer() {
 
     setInterval(() => {
-      if (this.props.watchPosition) {
-        this.props.onTimeTick();
+      if (this.state.workout.watchPosition) {
+        this.setState(state => {
+          state.workout.incrementTime();
+          return state;
+        });
       }
     }, 1000);
   }
@@ -30,9 +36,13 @@ export default class Home extends React.Component {
 
     let { latitude, longitude, ...movementData } = locationData;
 
+    this.setState(state => {
+      state.workout.addPosition({latitude, longitude});
+      state.workout.addMovementData(movementData);
+
+      return state;
+    });
     this.props.onPositionChange({latitude, longitude});
-    this.props.onNewPosition({ latitude, longitude });
-    this.props.onMovenentData(movementData);
   }
 
   getCurrentPosition(highAccuracy = true) {
@@ -41,7 +51,7 @@ export default class Home extends React.Component {
       (position) => {
         this.processLocationData(position.coords);
       },
-      (error) => {
+      (_) => {
         this.getCurrentPosition(!highAccuracy);
       },
       { enableHighAccuracy: highAccuracy, timeout: 20000, maximumAge: 1000 }
@@ -55,7 +65,7 @@ export default class Home extends React.Component {
         (position) => {
           this.processLocationData(position.coords);
         },
-        (error) => {
+        (_) => {
           this.watchPosition(!highAccuracy);
         },
         { enableHighAccuracy: highAccuracy, timeout: 20000, maximumAge: 1000, distanceFilter: 5 }
@@ -63,7 +73,7 @@ export default class Home extends React.Component {
     }
   }
 
-  trackUser(watch, highAccuracy = true) {
+  trackUser(watch) {
 
     if (watch) {
       this.getCurrentPosition();
@@ -74,50 +84,70 @@ export default class Home extends React.Component {
     }
   }
 
+  startStop() {
+
+    if (!this.state.workout.watchPosition) {
+      this.props.onWorkoutStart();
+    }
+
+    this.setState(state => {
+      state.workout.toggleWorkout();
+      return state;
+    });
+  }
+
+  stopWorkout() {
+
+    this.setState(state => {
+      state.workout.stopWorkout();
+      return state;
+    });
+  }
+
   render() {
+
+    const workout = this.state.workout;
 
     return (
       <View style={HomeStyle.container}>
         <View style={HomeStyle.controllers}>
           <TouchableOpacity
             style={HomeStyle.controller}
-            onPress={() => { this.props.onWatchPosition(!this.props.watchPosition); this.trackUser(!this.props.watchPosition); }}
-          >
-            <Text style={HomeStyle.gridText}>{this.props.watchPosition ? "Pause" : "Start"}</Text>
+            onPress={() => { this.startStop(); this.trackUser(!workout.watchPosition); }}>
+            <Text style={HomeStyle.gridText}>{workout.watchPosition ? "Pause" : "Start"}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={HomeStyle.controller}
             title="Stop"
-            onPress={() => { this.props.onWatchPosition(false) }}
-          >
+            onPress={this.stopWorkout}>
             <Text style={HomeStyle.gridText}>Stop</Text>
           </TouchableOpacity>
         </View>
 
         <View style={HomeStyle.grid}>
-          <Text style={HomeStyle.gridText}>Speed: {this.props.speed}</Text>
-          <Text style={HomeStyle.gridText}>Distance: {this.props.distance}</Text>
+          <Text style={HomeStyle.gridText}>Speed: {workout.Speed}</Text>
+          <Text style={HomeStyle.gridText}>Distance: {workout.Distance}</Text>
         </View>
         <View style={HomeStyle.grid}>
-          <Text style={HomeStyle.gridText}>Altitude: {this.props.altitude}</Text>
+          <Text style={HomeStyle.gridText}>Altitude: {workout.Altitude}</Text>
           <Text style={HomeStyle.gridText}>Temperature: 28&#8451;</Text>
         </View>
 
         <View style={HomeStyle.grid}>
-          <Text style={HomeStyle.gridText}>{this.props.time}</Text>
+          <Text style={HomeStyle.gridText}>{workout.Time}</Text>
         </View>
 
         <View style={HomeStyle.smallGrid}>
-          <Text style={HomeStyle.gridText}>Max speed: {this.props.maxSpeed}</Text>
-          <Text style={HomeStyle.gridText}>Min speed: {this.props.minSpeed}</Text>
+          <Text style={HomeStyle.gridText}>Max speed: {workout.MaxSpeed}</Text>
+          <Text style={HomeStyle.gridText}>Min speed: {workout.MinSpeed}</Text>
         </View>
         <View style={HomeStyle.smallGrid}>
-          <Text style={HomeStyle.gridText}>Max altitude: {this.props.maxAltitude}</Text>
-          <Text style={HomeStyle.gridText}>Min altitude: {this.props.minAltitude}</Text>
+          <Text style={HomeStyle.gridText}>Max altitude: {workout.MaxAltitude}</Text>
+          <Text style={HomeStyle.gridText}>Min altitude: {workout.MinAltitude}</Text>
         </View>
         <View style={HomeStyle.smallGrid}>
-          <Text style={HomeStyle.gridText}>Average speed: {this.props.avgSpeed}</Text>
-          <Text style={HomeStyle.gridText}>Average pace: {this.props.avgPace}</Text>
+          <Text style={HomeStyle.gridText}>Average speed: {workout.AvgSpeed}</Text>
+          <Text style={HomeStyle.gridText}>Average pace: {workout.AvgPace}</Text>
         </View>
       </View>
     );

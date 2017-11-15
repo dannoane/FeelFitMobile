@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
+import _ from 'lodash';
 
 const styles = StyleSheet.create({
   map: {
@@ -31,9 +32,9 @@ export default class Map extends React.Component {
 
   render() {
 
-    const coords = this.props.currentPosition;
-    const region = this._calculateRegion(coords);
     const route = this.props.route;
+    const coords = _.last(_.last(route)) || {latitude: 47.051389, longitude: 21.940278};
+    const region = this._calculateRegion(coords);
 
     return (
         <MapView
@@ -42,12 +43,13 @@ export default class Map extends React.Component {
           <MapView.Marker
             coordinate={coords}/>
 
-          {route.map(segment => {
+          {route.map((segment, index) => {
             if (segment.length < 2) {
               return;
             }
 
             return <MapView.Polyline
+              key={`${index}`}
               strokeWidth={3}
               strokeColor={'#008efd'}
               coordinates={segment}
