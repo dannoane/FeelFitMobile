@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-import PropTypes from 'prop-types';
 import LogInStyle from './../Style/LogInStyle';
 import LogInService from './../Service/LogInService';
 
@@ -33,7 +32,7 @@ export default class LogInScreen extends Component {
     let result = await this.logInService.logIn(username, password);
 
     if (!result.success) {
-      this.setState({ 'username': '', password: '', error: result.message });
+      this.setState({ username: '', password: '', error: result.message });
     }
     else {
       this.props.onLogIn(true);

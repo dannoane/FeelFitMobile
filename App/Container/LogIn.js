@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { setLogInStatus, setAccessToken } from './../Action';
-import LogInScreen from './../Component/LogInScreen';
+import LogInScreen from '../Component/LogIn';
 
 const mapStateToProps = (state) => ({
   loggedIn: state.UserState.loggedIn
@@ -11,5 +11,5 @@ const mapDispatchToProps = {
   onAccessToken: setAccessToken
 };
 
-const LogInContainer = connect(mapStateToProps, mapDispatchToProps)(LogInScreen);
-export default LogInContainer;
+const LogIn = connect(mapStateToProps, mapDispatchToProps)(LogInScreen);
+export default LogIn;
