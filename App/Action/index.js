@@ -9,27 +9,11 @@ export const setAccessToken = (accessToken) => ({
   value: accessToken
 });
 
-export const setCurrentPosition = (position) => ({
-  type: 'SET_POSITION',
-  value: position
+export const addRouteSegment = () => ({
+  type: 'ADD_ROUTE_SEGMENT'
 });
 
 export const addPosition = (position) => ({
   type: 'ADD_POSITION',
   value: position
-});
-
-export const addMovementData = (data) => ({
-  type: 'ADD_MOVEMENT_DATA',
-  value: data
-});
-
-export const setWatchPosition = (watchPosition) => ({
-  type: 'SET_WATCH_POSITION',
-  value: watchPosition
-})
-
-export const incrementTime = () => ({
-  type: 'INCREMENT_TIME',
-  value: 1
 });
