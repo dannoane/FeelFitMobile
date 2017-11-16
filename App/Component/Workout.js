@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import HomeStyle from './../Style/HomeStyle';
-import WorkoutModel from './../Model/Workout';
+import HomeStyle from '../Style/HomeStyle';
+import WorkoutModel from '../Model/Workout';
+import WeatherService from "../Service/WeatherService";
 
 export default class Workout extends Component {
 
@@ -13,6 +14,7 @@ export default class Workout extends Component {
       workout: new WorkoutModel(),
     };
     this._initTimer();
+    this._initWeather();
   }
 
   _initTimer() {
@@ -25,6 +27,29 @@ export default class Workout extends Component {
         });
       }
     }, 1000);
+  }
+
+  async _initWeather() {
+
+    const sleep = (time) => {
+      return new Promise((resolve) => setTimeout(resolve, time));
+    }    
+
+    let service = new WeatherService();
+    while (true) {
+      if (this.state.workout.watchPosition && this.state.workout.CurrentPosition) {
+        service.getWeather(this.state.workout.CurrentPosition).then((weather) => {
+          this.setState(state => {
+            state.workout.Temperature = weather.temp;
+            return state;
+          });
+        });
+        
+        await sleep(10 * 60 * 1000);
+      }
+      
+      await sleep(15 * 1000);
+    }
   }
 
   componentWillUnmount() {
@@ -119,7 +144,7 @@ export default class Workout extends Component {
           <TouchableOpacity
             style={HomeStyle.controller}
             title="Stop"
-            onPress={this.stopWorkout}>
+            onPress={() => { this.stopWorkout() }}>
             <Text style={HomeStyle.gridText}>Stop</Text>
           </TouchableOpacity>
         </View>
@@ -130,7 +155,7 @@ export default class Workout extends Component {
         </View>
         <View style={HomeStyle.grid}>
           <Text style={HomeStyle.gridText}>Altitude: {workout.Altitude}</Text>
-          <Text style={HomeStyle.gridText}>Temperature: 28&#8451;</Text>
+          <Text style={HomeStyle.gridText}>Temperature: {workout.Temperature}</Text>
         </View>
 
         <View style={HomeStyle.grid}>
