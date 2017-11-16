@@ -9,6 +9,7 @@ export default class Workout {
         this.route = [];
         this.movementData = [];
         this.time = 0;
+        this.weather = {};
     }
 
 
@@ -41,6 +42,10 @@ export default class Workout {
         this.time += 1;
     }
 
+
+    get CurrentPosition() {
+        return _.last(_.last(this.route));
+    }
 
     get Altitude() {
         return stats.getAltitude(_.last(this.movementData));
@@ -80,5 +85,14 @@ export default class Workout {
 
     get AvgPace() {
         return stats.getAvgPace(this.time, this.route);
+    }
+
+
+    set Temperature(temperature) {
+        this.weather.temperature = temperature;
+    }
+
+    get Temperature() {
+        return `${this.weather.temperature || 'N/A'} ℃`;
     }
 }
