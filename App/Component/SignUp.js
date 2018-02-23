@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
-
-import SignUpStyle from './../Style/SignUpStyle';
+import { Text, FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements';
+import { View } from 'react-native';
+import ViewStyle from './../Style/ViewStyle';
 import SignUpService from './../Service/SignUpService';
 
 export default class SignUpScreen extends Component {
@@ -21,82 +21,98 @@ export default class SignUpScreen extends Component {
       password: '',
       repassword: '',
       email: '',
+      error: '',
+      loading: false
     };
   }
 
   async _signUp() {
+
+    this.setState({loading: true});
 
     let { name, username, password, repassword, email } = this.state;
     let validationResult = this.service.validate({ name, username, password, repassword, email });
 
     if (!validationResult.valid) {
       this.setState({ error: validationResult.message });
-      return;
-    }
-
-    this.setState({ error: '' });
-
-    let result = await this.service.signUp({ name, username, password, email });
-    if (result.success) {
-      this.props.navigation.navigate('LogIn', { signedUp: true });
     }
     else {
-      this.setState({ error: result.message });
+      this.setState({ error: '' });
+
+      let result = await this.service.signUp({ name, username, password, email });
+      if (result.success) {
+        this.props.navigation.navigate('LogIn', { signedUp: true });
+      }
+      else {
+        this.setState({ error: result.message });
+      }
     }
+
+    this.setState({loading: false});
   }
 
   render() {
 
     const { navigate } = this.props.navigation;
 
+    const view = new ViewStyle()
+      .flex(1)
+      .alignItems('center')
+      .build();
+    const title = new ViewStyle()
+      .flex(1)
+      .justifyContent('flex-end')
+      .build();
+    const form = new ViewStyle()
+      .flex(4)
+      .justifyContent('center')
+      .width('70%')
+      .build();
+
     return (
-      <View style={SignUpStyle.page}>
-        <View style={SignUpStyle.header}>
-          <Text>Sign Up</Text>
+      <View style={view}>
+        <View style={title}>
+          <Text h1>Sign Up</Text>
         </View>
 
-        <View style={SignUpStyle.body}>
-          <Text style={SignUpStyle.bodyElement}>Name:</Text>
-          <TextInput
-            style={SignUpStyle.bodyElement}
+        <View style={form}>
+          <FormLabel>Name</FormLabel>
+          <FormInput placeholder={"Enter your name"}
             value={this.state.name}
-            onChangeText={(text) => { this.setState({ name: text }) }}/>
+            onChangeText={(name) => this.setState({name})} />
 
-          <Text style={SignUpStyle.bodyElement}>Username:</Text>
-          <TextInput
-            style={SignUpStyle.bodyElement}
+          <FormLabel>Username</FormLabel>
+          <FormInput placeholder={"Enter your username"}
             value={this.state.username}
-            onChangeText={(text) => { this.setState({ username: text }) }}/>
+            onChangeText={(username) => this.setState({username})} />
 
-          <Text style={SignUpStyle.bodyElement}>Password:</Text>
-          <TextInput
-            style={SignUpStyle.bodyElement}
+          <FormLabel>Password</FormLabel>
+          <FormInput placeholder={"Enter your password"}
             secureTextEntry={true}
             value={this.state.password}
-            onChangeText={(text) => { this.setState({ password: text }) }}/>
+            onChangeText={(password) => this.setState({password})} />
 
-            <Text style={SignUpStyle.bodyElement}>Confirm Password:</Text>
-            <TextInput
-              style={SignUpStyle.bodyElement}
-              secureTextEntry={true}
-              value={this.state.repassword}
-              onChangeText={(text) => { this.setState({ repassword: text }) }}/>
+          <FormLabel>Confirm password</FormLabel>
+          <FormInput placeholder={"Reenter your password"}
+            secureTextEntry={true}
+            value={this.state.repassword}
+            onChangeText={(repassword) => this.setState({repassword})} />
 
-          <Text style={SignUpStyle.bodyElement}>Email:</Text>
-          <TextInput
-            style={SignUpStyle.bodyElement}
+          <FormLabel>Email</FormLabel>
+          <FormInput placeholder={"Enter your email"}
             value={this.state.email}
-            keyboardType='email-address'
-            onChangeText={(text) => { this.setState({ email: text }) }}/>
+            onChangeText={(username) => this.setState({email})} />
 
-          <Text style={SignUpStyle.bodyElement}>{this.state.error}</Text>
-        </View>
+          <FormValidationMessage>{this.state.error}</FormValidationMessage>
 
-        <View style={SignUpStyle.footer}>
           <Button
-            title="Send"
-            onPress={() => { this._signUp() }}>
-          </Button>
+            raised
+            icon={{name: 'account-plus', type:'material-community'}}
+            fontWeight={'bold'}
+            title='Sign Up'
+            loading={this.state.loading}
+            disabled={this.state.loading}
+            onPress={() => this._signUp()} />
         </View>
       </View>
     );
