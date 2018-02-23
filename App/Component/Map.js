@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import _ from 'lodash';
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
   map: {
@@ -9,7 +10,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Map extends React.Component {
+class Map extends React.Component {
 
   constructor(props) {
 
@@ -59,3 +60,11 @@ export default class Map extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  route: state.Route
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);

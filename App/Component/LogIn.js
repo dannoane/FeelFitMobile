@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import LogInStyle from './../Style/LogInStyle';
 import LogInService from './../Service/LogInService';
+import { connect } from 'react-redux';
+import { setLogInStatus, setAccessToken } from './../Action';
 
-export default class LogInScreen extends Component {
+class LogIn extends Component {
 
   constructor(props) {
 
@@ -84,3 +86,14 @@ export default class LogInScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  loggedIn: state.UserState.loggedIn
+});
+
+const mapDispatchToProps = {
+  onLogIn: setLogInStatus,
+  onAccessToken: setAccessToken
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

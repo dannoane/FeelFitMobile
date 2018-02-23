@@ -1,6 +1,6 @@
 import { TabNavigator } from 'react-navigation';
-import Workout from '../../Container/Workout';
-import Map from '../../Container/Map';
+import Workout from './../Workout';
+import Map from './../Map';
 import { mapNavigationStateParamsToProps } from "./Util/index";
 
 

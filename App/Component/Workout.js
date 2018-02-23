@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 import HomeStyle from '../Style/HomeStyle';
 import WorkoutModel from '../Model/Workout';
+import { addRouteSegment, addPosition } from './../Action';
 import WeatherService from "../Service/WeatherService";
 
-export default class Workout extends Component {
+class Workout extends Component {
 
   constructor(props) {
 
@@ -33,7 +35,7 @@ export default class Workout extends Component {
 
     const sleep = (time) => {
       return new Promise((resolve) => setTimeout(resolve, time));
-    }    
+    }
 
     let service = new WeatherService();
     while (true) {
@@ -44,10 +46,10 @@ export default class Workout extends Component {
             return state;
           });
         });
-        
+
         await sleep(10 * 60 * 1000);
       }
-      
+
       await sleep(15 * 1000);
     }
   }
@@ -178,3 +180,12 @@ export default class Workout extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = {
+  onWorkoutStart: addRouteSegment,
+  onPositionChange: addPosition
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Workout);

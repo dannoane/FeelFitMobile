@@ -1,5 +1,5 @@
 import { StackNavigator, NavigationActions } from 'react-navigation';
-import LogIn from '../../Container/LogIn';
+import LogIn from './../LogIn';
 import SignUp from './../SignUp';
 import { mapNavigationStateParamsToProps } from "./Util/index";
 import MainNavigator from "./MainNavigator";
