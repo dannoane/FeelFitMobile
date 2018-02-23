@@ -4,7 +4,8 @@ import UserState from '../Reducer/UserState';
 import Route from '../Reducer/Route';
 
 const loadState = () => {
-  return { UserState: { loggedIn: true } };
+  //return { UserState: { loggedIn: true } };
+  return undefined;
 };
 
 const saveState = (state) => {
