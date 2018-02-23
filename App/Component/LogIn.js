@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
-import LogInStyle from './../Style/LogInStyle';
-import LogInService from './../Service/LogInService';
+import { Text, FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { setLogInStatus, setAccessToken } from './../Action';
+import ViewStyle from './../Style/ViewStyle';
+import LogInService from './../Service/LogInService';
 
 class LogIn extends Component {
 
@@ -16,7 +17,8 @@ class LogIn extends Component {
       username: '',
       password: '',
       error: '',
-      message: this.props.signedUp ? 'Successfully signed up!' : ''
+      message: this.props.signedUp ? 'Successfully signed up!' : '',
+      loading: false
     };
   }
 
@@ -30,6 +32,8 @@ class LogIn extends Component {
 
   async _logIn() {
 
+    this.setState({loading: true});
+
     let { username, password } = this.state;
     let result = await this.logInService.logIn(username, password);
 
@@ -40,47 +44,71 @@ class LogIn extends Component {
       this.props.onLogIn(true);
       this.props.onAccessToken(result.token);
     }
+
+    this.setState({loading: false});
   }
 
   render() {
 
     const { navigate } = this.props.navigation;
 
+    const view = new ViewStyle()
+      .flex(1)
+      .alignItems('center')
+      .build();
+    const title = new ViewStyle()
+      .flex(1)
+      .justifyContent('flex-end')
+      .build();
+    const form = new ViewStyle()
+      .flex(2)
+      .justifyContent('center')
+      .width('70%')
+      .build();
+    const footer = new ViewStyle()
+      .flex(1)
+      .justifyContent('center')
+      .width('70%')
+      .build();
+
     return (
-      <View style={LogInStyle.page}>
-        <View style={LogInStyle.header}>
-          <Text>Log In</Text>
+      <View style={view}>
+        <View style={title}>
+          <Text h1>Log In</Text>
         </View>
 
-        <View style={LogInStyle.body}>
-          <Text style={LogInStyle.bodyElement}>Username:</Text>
-          <TextInput
-            style={LogInStyle.bodyElement}
+        <View style={form}>
+          <FormLabel>Username</FormLabel>
+          <FormInput placeholder={"Enter your username"}
             value={this.state.username}
-            onChangeText={(text) => { this.setState({ username: text }) } }/>
+            onChangeText={(username) => this.setState({username})} />
 
-          <Text style={LogInStyle.bodyElement}>Password:</Text>
-          <TextInput
-            style={LogInStyle.bodyElement}
-            secureTextEntry={true}
+          <FormLabel>Password</FormLabel>
+          <FormInput placeholder={"Enter your password"}
             value={this.state.password}
-            onChangeText={(text) => { this.setState({ password: text }) } }/>
+            secureTextEntry={true}
+            onChangeText={(password) => this.setState({password})} />
 
-          <Text style={LogInStyle.bodyElement}>{this.state.error}</Text>
+          <FormValidationMessage>{this.state.error}</FormValidationMessage>
 
           <Button
-            title="Log  In"
-            onPress={() => { this._logIn(); }}
-          />
+            raised
+            icon={{name: 'login', type:'material-community'}}
+            fontWeight={'bold'}
+            title='Log In'
+            loading={this.state.loading}
+            disabled={this.state.loading}
+            onPress={() => this._logIn()} />
         </View>
 
-        <View style={LogInStyle.footer}>
+        <View style={footer}>
           <Button
-            title="Sign Up"
+            raised
+            icon={{name: 'account-plus', type:'material-community'}}
+            fontWeight={'bold'}
+            title='Sign Up'
             onPress={() => { navigate('SignUp') }}>
           </Button>
-
-          <Text>{this.state.message}</Text>
         </View>
       </View>
     );
