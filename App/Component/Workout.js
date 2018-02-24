@@ -18,7 +18,10 @@ export default class Workout extends Component {
       .build();
 
     return (
-      <Swiper showsButtons={true}>
+      <Swiper
+        showsButtons={true}
+        loop={false}
+        showsPagination={false}>
         <View style={screen}>
           <Statistics />
         </View>

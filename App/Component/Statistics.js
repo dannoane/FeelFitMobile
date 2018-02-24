@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
-import HomeStyle from '../Style/HomeStyle';
+import ViewStyle from './../Style/ViewStyle';
 import WorkoutModel from '../Model/Workout';
 import { addRouteSegment, addPosition } from './../Action';
 import WeatherService from "../Service/WeatherService";
+import Time from './Statistics/Time';
+import Distance from './Statistics/Distance';
+import Speed from './Statistics/Speed';
+import Altitude from './Statistics/Altitude';
+import OtherStats from './Statistics/OtherStats';
 
 class Statistics extends Component {
 
@@ -135,46 +141,64 @@ class Statistics extends Component {
 
     const workout = this.state.workout;
 
+    const view = new ViewStyle()
+      .flex(1)
+      .flexDirection('column')
+      .build();
+    const indicator = new ViewStyle()
+      .flex(3)
+      .flexDirection('row')
+      .alignItems('center')
+      .justifyContent('center')
+      .build();
+    const buttons = new ViewStyle()
+      .flex(1)
+      .flexDirection('row')
+      .alignItems('flex-start')
+      .justifyContent('space-around')
+      .build();
+
     return (
-      <View style={HomeStyle.container}>
-        <View style={HomeStyle.controllers}>
-          <TouchableOpacity
-            style={HomeStyle.controller}
-            onPress={() => { this.startStop(); this.trackUser(!workout.watchPosition); }}>
-            <Text style={HomeStyle.gridText}>{workout.watchPosition ? "Pause" : "Start"}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={HomeStyle.controller}
-            title="Stop"
-            onPress={() => { this.stopWorkout() }}>
-            <Text style={HomeStyle.gridText}>Stop</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={view}>
+        <Time
+          style={indicator}
+          time={workout.Time} />
 
-        <View style={HomeStyle.grid}>
-          <Text style={HomeStyle.gridText}>Speed: {workout.Speed}</Text>
-          <Text style={HomeStyle.gridText}>Distance: {workout.Distance}</Text>
-        </View>
-        <View style={HomeStyle.grid}>
-          <Text style={HomeStyle.gridText}>Altitude: {workout.Altitude}</Text>
-          <Text style={HomeStyle.gridText}>Temperature: {workout.Temperature}</Text>
-        </View>
+        <Distance
+          style={indicator}
+          distance={workout.Distance} />
 
-        <View style={HomeStyle.grid}>
-          <Text style={HomeStyle.gridText}>{workout.Time}</Text>
-        </View>
+        <Speed
+          style={indicator}
+          speed={workout.Speed}
+          minSpeed={workout.MinSpeed}
+          avgSpeed={workout.AvgSpeed}
+          maxSpeed={workout.MaxSpeed} />
 
-        <View style={HomeStyle.smallGrid}>
-          <Text style={HomeStyle.gridText}>Max speed: {workout.MaxSpeed}</Text>
-          <Text style={HomeStyle.gridText}>Min speed: {workout.MinSpeed}</Text>
-        </View>
-        <View style={HomeStyle.smallGrid}>
-          <Text style={HomeStyle.gridText}>Max altitude: {workout.MaxAltitude}</Text>
-          <Text style={HomeStyle.gridText}>Min altitude: {workout.MinAltitude}</Text>
-        </View>
-        <View style={HomeStyle.smallGrid}>
-          <Text style={HomeStyle.gridText}>Average speed: {workout.AvgSpeed}</Text>
-          <Text style={HomeStyle.gridText}>Average pace: {workout.AvgPace}</Text>
+        <Altitude
+          style={indicator}
+          altitude={workout.Altitude}
+          minAltitude={workout.MinAltitude}
+          maxAltitude={workout.MaxAltitude} />
+
+        <OtherStats
+          style={indicator}
+          avgPace={workout.AvgPace}
+          temperature={workout.Temperature} />
+
+        <View style={buttons}>
+          <Button
+            raised
+            rounded
+            icon={{name: 'play', style: { marginRight: 0 }, type:'material-community'}}
+            containerViewStyle={{borderRadius: 50}}
+            onPress={() => { this.startStop(); this.trackUser(!workout.watchPosition); }} />
+          <Button
+            raised
+            rounded
+            icon={{name: 'stop', style: { marginRight: 0 }, type:'material-community'}}
+            containerViewStyle={{borderRadius: 50}}
+            onPress={() => this.stopWorkout() } />
         </View>
       </View>
     );
