@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { AppState, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import ViewStyle from './../Style/ViewStyle';
 import WorkoutModel from '../Model/Workout';
-import { addRouteSegment, addPosition } from './../Action';
-import WeatherService from "../Service/WeatherService";
+import { addRouteSegment, setWorkoutState } from './../Action';
 import Time from './Statistics/Time';
 import Distance from './Statistics/Distance';
 import Speed from './Statistics/Speed';
 import Altitude from './Statistics/Altitude';
 import OtherStats from './Statistics/OtherStats';
+import * as Timer from './../Util/Timer';
+import Geolocation from './../Util/Geolocation';
+import Weather from './../Util/Weather';
 
 class Statistics extends Component {
 
@@ -19,127 +21,58 @@ class Statistics extends Component {
     super(props);
 
     this.state = {
-      workout: new WorkoutModel(),
+      appState: AppState.currentState,
     };
-    this._initTimer();
-    this._initWeather();
+
+    this.initComponent();
   }
 
-  _initTimer() {
+  async initComponent() {
 
-    setInterval(() => {
-      if (this.state.workout.watchPosition) {
-        this.setState(state => {
-          state.workout.incrementTime();
-          return state;
-        });
-      }
-    }, 1000);
+    await Timer.loadTime();
+    Timer.init();
   }
 
-  async _initWeather() {
-
-    const sleep = (time) => {
-      return new Promise((resolve) => setTimeout(resolve, time));
-    }
-
-    let service = new WeatherService();
-    while (true) {
-      if (this.state.workout.watchPosition && this.state.workout.CurrentPosition) {
-        service.getWeather(this.state.workout.CurrentPosition).then((weather) => {
-          this.setState(state => {
-            state.workout.Temperature = weather.temp;
-            return state;
-          });
-        });
-
-        await sleep(10 * 60 * 1000);
-      }
-
-      await sleep(15 * 1000);
-    }
+  componentDidMount() {
+    AppState.addEventListener('change', this.handleAppStateChange);
   }
 
   componentWillUnmount() {
-
-    navigator.geolocation.clearWatch(this.watchId);
+    AppState.removeEventListener('change', this.handleAppStateChange);
   }
 
-  processLocationData(locationData) {
+  handleAppStateChange = async (nextAppState) => {
 
-    let { latitude, longitude, ...movementData } = locationData;
-
-    this.setState(state => {
-      state.workout.addPosition({latitude, longitude});
-      state.workout.addMovementData(movementData);
-
-      return state;
-    });
-    this.props.onPositionChange({latitude, longitude});
-  }
-
-  getCurrentPosition(highAccuracy = true) {
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.processLocationData(position.coords);
-      },
-      (_) => {
-        this.getCurrentPosition(!highAccuracy);
-      },
-      { enableHighAccuracy: highAccuracy, timeout: 20000, maximumAge: 1000 }
-    );
-  }
-
-  watchPosition(highAccuracy = true) {
-
-    if (!this.watchId) {
-      this.watchId = navigator.geolocation.watchPosition(
-        (position) => {
-          this.processLocationData(position.coords);
-        },
-        (_) => {
-          this.watchPosition(!highAccuracy);
-        },
-        { enableHighAccuracy: highAccuracy, timeout: 20000, maximumAge: 1000, distanceFilter: 5 }
-      );
+    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+      await Timer.loadTime();
     }
+    else if (this.state.appState === 'active' && nextAppState.match(/inactive|background/)) {
+      await Timer.storeTime();
+    }
+
+    this.setState({appState: nextAppState});
   }
 
-  trackUser(watch) {
+  toggleWorkout() {
 
-    if (watch) {
-      this.getCurrentPosition();
-      this.watchPosition();
-    }
-    else {
-      navigator.geolocation.clearWatch(this.watchId);
-    }
-  }
-
-  startStop() {
-
-    if (!this.state.workout.watchPosition) {
+    if (this.props.workoutState === 'stopped') {
+      this.props.onWorkoutStateChange('started');
       this.props.onWorkoutStart();
     }
-
-    this.setState(state => {
-      state.workout.toggleWorkout();
-      return state;
-    });
+    else {
+      this.props.onWorkoutStateChange('paused');
+    }
   }
 
   stopWorkout() {
 
-    this.setState(state => {
-      state.workout.stopWorkout();
-      return state;
-    });
+    this.props.onWorkoutStateChange('stopped');
   }
 
   render() {
 
-    const workout = this.state.workout;
+    const { time, workoutState, route, movementData, weather } = this.props;
+    const workout = new WorkoutModel(time, workoutState, route, movementData, weather);
 
     const view = new ViewStyle()
       .flex(1)
@@ -192,7 +125,7 @@ class Statistics extends Component {
             rounded
             icon={{name: 'play', style: { marginRight: 0 }, type:'material-community'}}
             containerViewStyle={{borderRadius: 50}}
-            onPress={() => { this.startStop(); this.trackUser(!workout.watchPosition); }} />
+            onPress={() => this.toggleWorkout() } />
           <Button
             raised
             rounded
@@ -205,11 +138,17 @@ class Statistics extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  route: state.Route.route,
+  time: state.Route.time,
+  workoutState: state.Route.workoutState,
+  movementData: state.Route.movementData,
+  weather: state.Route.weather
+});
 
 const mapDispatchToProps = {
   onWorkoutStart: addRouteSegment,
-  onPositionChange: addPosition
+  onWorkoutStateChange: setWorkoutState
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Statistics);
