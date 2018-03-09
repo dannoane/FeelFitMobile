@@ -62,7 +62,7 @@ class Map extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  route: state.Route
+  route: state.Route.route
 });
 
 const mapDispatchToProps = {};
