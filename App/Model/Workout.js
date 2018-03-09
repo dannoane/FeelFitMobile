@@ -3,43 +3,13 @@ import _ from 'lodash';
 
 export default class Workout {
 
-    constructor() {
+    constructor(time, workoutState, route, movementData, weather) {
 
-        this.watchPosition = false;
-        this.route = [];
-        this.movementData = [];
-        this.time = 0;
-        this.weather = {};
-    }
-
-
-    stopWorkout() {
-        this.watchPosition = false;
-    }
-
-    toggleWorkout() {
-
-      this.watchPosition = !this.watchPosition;
-      this.addRouteSegment();
-    }
-
-    addRouteSegment() {
-
-        if (this.watchPosition) {
-            this.route.push([]);
-        }
-    }
-
-    addPosition(position) {
-        this.route[this.route.length - 1].push(position);
-    }
-
-    addMovementData(movementData) {
-        this.movementData.push(movementData);
-    }
-
-    incrementTime() {
-        this.time += 1;
+        this.time = time;
+        this.workoutState = workoutState;
+        this.route = route;
+        this.movementData = movementData;
+        this.weather = weather;
     }
 
 
