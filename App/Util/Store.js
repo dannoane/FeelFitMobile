@@ -28,4 +28,4 @@ const ConfigureStore = () => {
   return store;
 };
 
-export default ConfigureStore;
+export const store = ConfigureStore();
