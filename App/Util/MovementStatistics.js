@@ -55,8 +55,7 @@ export const getAvgSpeed = (movementData) => {
     return 'N/A km/h';
   }
 
-  return (_.reduce(_.filter(movementData, mD => mD.speed > 0), (sum, mD) => sum + mD.speed, 0)
-    / (movementData.length * 3.6)) + ' km/h';
+  return (_.reduce(_.filter(movementData, mD => mD.speed > 0), (sum, mD) => sum + mD.speed, 0) / (movementData.length * 3.6)).toFixed(1) + ' km/h';
 };
 
 const getDistanceRaw = (route) => {
@@ -68,7 +67,7 @@ const getDistanceRaw = (route) => {
     let line = helpers.lineString(segment);
     distance += lineDistance(line, 'kilometers');
   }
-  
+
   return distance.toFixed(2);
 };
 
