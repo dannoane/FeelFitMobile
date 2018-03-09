@@ -14,12 +14,24 @@ export default class WeatherService {
 
     try {
       result = await axios.get(url);
-      result = JSON.parse(result);
+      result = processResult(result.data);
     }
     catch (err) {
-      // TODO: handle error
+      console.log(err.message);
     }
 
-    return result.data.main;
+    return result;
   }
+}
+
+const processResult = (result) => {
+
+  return {
+    temperature: result.main.temp,
+    humidity: result.main.humidity,
+    pressure: result.main.pressure,
+    sunrise: result.sys.sunrise,
+    sunset: result.sys.sunset,
+    weather: result.weather.map(w => w.description)
+  };
 }
