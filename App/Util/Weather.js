@@ -7,7 +7,7 @@ const UPDATE_INTERVAL = 1000 * 60 * 15 * 1000;
 let lastUpdated = null;
 let service = new WeatherService();
 
-store.subscribe(async () => {
+const Weather = async () => {
 
   let route = store.getState().Route;
 
@@ -21,4 +21,6 @@ store.subscribe(async () => {
       store.dispatch(setWeather(weather));
     }
   }
-});
+};
+
+export default Weather;

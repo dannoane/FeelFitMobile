@@ -11,8 +11,6 @@ import Speed from './Statistics/Speed';
 import Altitude from './Statistics/Altitude';
 import OtherStats from './Statistics/OtherStats';
 import * as Timer from './../Util/Timer';
-import Geolocation from './../Util/Geolocation';
-import Weather from './../Util/Weather';
 
 class Statistics extends Component {
 
