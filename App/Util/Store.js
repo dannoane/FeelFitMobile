@@ -4,6 +4,7 @@ import UserState from '../Reducer/UserState';
 import Route from '../Reducer/Route';
 import Geolocation from './Geolocation';
 import Weather from './Weather';
+import Motion from './Motion';
 
 const loadState = () => {
   return { UserState: { loggedIn: true } };
@@ -28,6 +29,7 @@ const ConfigureStore = () => {
   }, 1000));
   store.subscribe(Geolocation);
   store.subscribe(Weather);
+  store.subscribe(Motion);
 
   return store;
 };
