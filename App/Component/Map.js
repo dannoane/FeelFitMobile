@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import MotionMapper from '../Util/MotionMapper';
 
 const styles = StyleSheet.create({
   map: {
@@ -31,10 +32,79 @@ class Map extends React.Component {
     };
   }
 
+  _getCurrentPosition(route) {
+
+    return _.last(_.last(route)) || { latitude: 47.051389, longitude: 21.940278 };
+  }
+
+  _getColor(activity) {
+
+    let color;
+
+    switch (activity) {
+      case MotionMapper.WALKING:
+        color = '#ed445e';
+        break;
+      case MotionMapper.RUNNING:
+        color = '#5562d6';
+        break;
+      case MotionMapper.BIKING:
+        color = '#5eed7b';
+        break;
+      default:
+        color = '#000000';
+        break;
+    }
+
+    return color;
+  }
+
+  _partitionSegmentsByActivity(segment) {
+
+    if (!segment || segment.length < 2) {
+      return;
+    }
+
+    let polylines = [];
+    let polyline = [];
+
+    for (let i = 0; i < segment.length; ++i) {
+      polyline.push(segment[i]);
+
+      if (segment[i + 1].activity !== segment[i].activity) {
+        polyline.push(segment[i + 1]);
+        polylines.push({ polyine, activity: segment[i].activity });
+
+        polyline = [];
+      }
+    }
+
+    if (polyline.length > 0) {
+      polylines.push({ polyine, activity: _.last(segment).activity });
+    }
+
+    return polylines;
+  }
+
+  _mapSegmentsToPolylines(segment) {
+
+    if (!segment) {
+      return;
+    }
+
+    let color = this._getColor(segment.activity);
+
+    return (<MapView.Polyline
+      strokeWidth={3}
+      strokeColor={color}
+      coordinates={segment.polyine}
+      geodesic={true} />);
+  }
+
   render() {
 
     const route = this.props.route;
-    const coords = _.last(_.last(route)) || {latitude: 47.051389, longitude: 21.940278};
+    const coords = this._getCurrentPosition(route);
     const region = this._calculateRegion(coords);
 
     return (
@@ -44,18 +114,7 @@ class Map extends React.Component {
           <MapView.Marker
             coordinate={coords}/>
 
-          {route.map((segment, index) => {
-            if (segment.length < 2) {
-              return;
-            }
-
-            return <MapView.Polyline
-              key={`${index}`}
-              strokeWidth={3}
-              strokeColor={'#008efd'}
-              coordinates={segment}
-              geodesic={true} />
-          })}
+          {_.map(_.flatten(_.map(route, this._partitionSegmentsByActivity)), this._mapSegmentsToPolylines)}
         </MapView>
     );
   }
