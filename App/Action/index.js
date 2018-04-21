@@ -41,3 +41,8 @@ export const setWeather = (weather) => ({
   type: 'SET_WEATHER',
   value: weather
 });
+
+export const setActivity = (activity) => ({
+  type: 'SET_ACTIVITY',
+  value: activity
+});
