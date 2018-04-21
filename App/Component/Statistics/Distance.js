@@ -12,7 +12,7 @@ export default class Distance extends Component {
 
     return (
       <View style={this.props.style}>
-        <Text h1>{this.props.distance}</Text>
+        <Text h2>{this.props.distance}</Text>
       </View>
     )
   }

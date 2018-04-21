@@ -43,7 +43,7 @@ export default class Speed extends Component {
       <View style={this.props.style}>
         <Swiper>
           <View style={mainScreen}>
-            <Text h1>{this.props.speed}</Text>
+            <Text h2>{this.props.speed}</Text>
           </View>
           <View style={subScreen}>
             <Text h5>{this.props.minSpeed}</Text>

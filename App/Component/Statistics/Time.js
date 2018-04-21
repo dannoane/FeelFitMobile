@@ -12,7 +12,7 @@ export default class Time extends Component {
 
     return (
       <View style={this.props.style}>
-        <Text h1>{this.props.time}</Text>
+        <Text h2>{this.props.time}</Text>
       </View>
     )
   }

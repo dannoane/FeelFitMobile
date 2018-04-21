@@ -43,7 +43,7 @@ export default class Altitude extends Component {
       <View style={this.props.style}>
         <Swiper removeClippedSubviews={false}>
           <View style={mainScreen}>
-            <Text h1>{this.props.altitude}</Text>
+            <Text h2>{this.props.altitude}</Text>
           </View>
           <View style={subScreen}>
             <Text h4>{this.props.minAltitude}</Text>
