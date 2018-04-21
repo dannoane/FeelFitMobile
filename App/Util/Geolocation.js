@@ -20,10 +20,8 @@ const Geolocation = () => {
         console.log(err.code, err.message);
       },
       {
-        timeout: 25000,
-        maximumAge: 10000,
+        timeout: 20000,
         enableHighAccuracy: true,
-        distanceFilter: 5
       });
   }
   else if (route.workoutState !== 'started' && watchId !== null) {
