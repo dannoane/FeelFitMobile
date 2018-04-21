@@ -1,15 +1,17 @@
-import * as stats from './../Util/MovementStatistics';
 import _ from 'lodash';
+import * as stats from './../Util/MovementStatistics';
+import MotionMapper from './../Util/MotionMapper';
 
 export default class Workout {
 
-    constructor(time, workoutState, route, movementData, weather) {
+    constructor(time, workoutState, route, movementData, weather, activity) {
 
         this.time = time;
         this.workoutState = workoutState;
         this.route = route;
         this.movementData = movementData;
         this.weather = weather;
+        this.activity = activity;
     }
 
 
@@ -64,5 +66,19 @@ export default class Workout {
 
     get Temperature() {
         return `${this.weather.temperature || 'N/A'} ℃`;
+    }
+
+    get Activity() {
+        
+        switch (this.activity) {
+            case MotionMapper.WALKING:
+                return 'Walking';
+            case MotionMapper.RUNNING:
+                return 'Running';
+            case MotionMapper.BIKING:
+                return 'Biking';
+            default:
+                return 'Unknown';
+        }
     }
 }

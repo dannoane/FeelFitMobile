@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import ViewStyle from './../Style/ViewStyle';
 import WorkoutModel from '../Model/Workout';
 import { addRouteSegment, setWorkoutState } from './../Action';
+import Activity from './Statistics/Activity';
 import Time from './Statistics/Time';
 import Distance from './Statistics/Distance';
 import Speed from './Statistics/Speed';
@@ -69,8 +70,8 @@ class Statistics extends Component {
 
   render() {
 
-    const { time, workoutState, route, movementData, weather } = this.props;
-    const workout = new WorkoutModel(time, workoutState, route, movementData, weather);
+    const { time, workoutState, route, movementData, weather, activity } = this.props;
+    const workout = new WorkoutModel(time, workoutState, route, movementData, weather, activity);
 
     const view = new ViewStyle()
       .flex(1)
@@ -91,6 +92,10 @@ class Statistics extends Component {
 
     return (
       <View style={view}>
+        <Activity
+          style={indicator}
+          activity={workout.Activity} />
+
         <Time
           style={indicator}
           time={workout.Time} />
@@ -141,7 +146,8 @@ const mapStateToProps = (state) => ({
   time: state.Route.time,
   workoutState: state.Route.workoutState,
   movementData: state.Route.movementData,
-  weather: state.Route.weather
+  weather: state.Route.weather,
+  activity: state.Route.activity
 });
 
 const mapDispatchToProps = {
