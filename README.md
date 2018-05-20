@@ -1,7 +1,7 @@
 Noane Dan
 ndie1968@scs.ubbcluj.ro
 
-# BikeAppMobile
+# FeelFit
 
 The goal is to create an app that tracks the user's route when biking/running.
 It should show the user his location on a map, give him statistics like time,

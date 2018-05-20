@@ -1,12 +1,11 @@
-package com.bikeappmobile;
+package com.FeelFit;
 
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.sensors.RNSensorsPackage;
-import com.github.xinthink.rnmk.ReactMaterialKitPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.airbnb.android.react.maps.MapsPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.sensors.RNSensorsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -28,7 +27,6 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RNSensorsPackage(),
-            new ReactMaterialKitPackage(),
             new VectorIconsPackage(),
             new MapsPackage()
       );

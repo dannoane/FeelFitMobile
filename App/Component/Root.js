@@ -16,4 +16,4 @@ export default class Root extends Component {
   }
 }
 
-AppRegistry.registerComponent('BikeAppMobile', () => Root);
+AppRegistry.registerComponent('FeelFit', () => Root);
