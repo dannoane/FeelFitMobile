@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import { AppState, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { AppState, View, Switch } from 'react-native';
+import { Icon, Divider } from 'react-native-elements';
 import { connect } from 'react-redux';
 import ViewStyle from './../Style/ViewStyle';
 import WorkoutModel from '../Model/Workout';
 import { addRouteSegment, setWorkoutState } from './../Action';
-import Activity from './Statistics/Activity';
-import Time from './Statistics/Time';
-import Distance from './Statistics/Distance';
-import Speed from './Statistics/Speed';
-import Altitude from './Statistics/Altitude';
-import OtherStats from './Statistics/OtherStats';
+import { Activity, Altitude, AveragePace, Distance, Speed, Temperature, Time } from './StatisticsComponents';
 import * as Timer from './../Util/Timer';
 
 class Statistics extends Component {
@@ -78,63 +73,101 @@ class Statistics extends Component {
       .flexDirection('column')
       .build();
     const indicator = new ViewStyle()
-      .flex(3)
+      .flex(1)
       .flexDirection('row')
       .alignItems('center')
       .justifyContent('center')
       .build();
-    const buttons = new ViewStyle()
-      .flex(1)
+    const normalGrid = new ViewStyle()
+      .flex(2)
       .flexDirection('row')
-      .alignItems('flex-start')
+      .build();
+    const bigGrid = new ViewStyle()
+      .flex(3)
+      .flexDirection('row')
+      .build();
+    const buttonGrid = new ViewStyle()
+      .flex(2)
+      .flexDirection('row')
+      .alignItems('center')
       .justifyContent('space-around')
       .build();
 
     return (
       <View style={view}>
-        <Activity
-          style={indicator}
-          activity={workout.Activity} />
+        <View style={normalGrid}>
+          <Distance
+            style={indicator}
+            distance={workout.Distance} />
+          
+          <View style={{borderLeftWidth: 1, borderLeftColor: 'black'}}/>
 
-        <Time
-          style={indicator}
-          time={workout.Time} />
+          <Speed
+            style={indicator}
+            speed={workout.Speed}
+            minSpeed={workout.MinSpeed}
+            avgSpeed={workout.AvgSpeed}
+            maxSpeed={workout.MaxSpeed} />
+        </View>
 
-        <Distance
-          style={indicator}
-          distance={workout.Distance} />
+        <Divider style={{ backgroundColor: 'black' }} />
+        
+        <View style={normalGrid}>
+          <Altitude
+            style={indicator}
+            altitude={workout.Altitude}
+            minAltitude={workout.MinAltitude}
+            maxAltitude={workout.MaxAltitude} />
+          
+          <View style={{borderLeftWidth: 1, borderLeftColor: 'black'}}/>
+          
+          <Activity
+            style={indicator}
+            activity={workout.Activity} />
+        </View>
 
-        <Speed
-          style={indicator}
-          speed={workout.Speed}
-          minSpeed={workout.MinSpeed}
-          avgSpeed={workout.AvgSpeed}
-          maxSpeed={workout.MaxSpeed} />
+        <Divider style={{ backgroundColor: 'black' }} />
 
-        <Altitude
-          style={indicator}
-          altitude={workout.Altitude}
-          minAltitude={workout.MinAltitude}
-          maxAltitude={workout.MaxAltitude} />
+        <View style={bigGrid}>
+          <Time
+            style={indicator}
+            time={workout.Time} />
+        </View>
 
-        <OtherStats
-          style={indicator}
-          avgPace={workout.AvgPace}
-          temperature={workout.Temperature} />
+        <Divider style={{ backgroundColor: 'black' }} />
 
-        <View style={buttons}>
-          <Button
+        <View style={normalGrid}>
+          <AveragePace
+            style={indicator}
+            avgPace={workout.AvgPace} />
+
+          <View style={{borderLeftWidth: 1, borderLeftColor: 'black'}}/>    
+
+          <Temperature
+            style={indicator}
+            temperature={workout.Temperature} />
+        </View>
+
+        <Divider style={{ backgroundColor: 'black' }} />
+
+        <View style={buttonGrid}>
+          <Icon
+            name='stop'
+            color='black'
+            type='material-community'
             raised
-            rounded
-            icon={{name: 'play', style: { marginRight: 0 }, type:'material-community'}}
-            containerViewStyle={{borderRadius: 50}}
-            onPress={() => this.toggleWorkout() } />
-          <Button
-            raised
-            rounded
-            icon={{name: 'stop', style: { marginRight: 0 }, type:'material-community'}}
-            containerViewStyle={{borderRadius: 50}}
-            onPress={() => this.stopWorkout() } />
+            size={25}
+            onPress={() => this.stopWorkout()} />
+          <Icon
+            name='play'
+            color='black'
+            type = 'material-community'   
+            raised         
+            size={30}
+            onPress={() => this.toggleWorkout()} />
+          <Switch
+            value={false}
+            onValueChange={() => console.log('ok')} />
         </View>
       </View>
     );

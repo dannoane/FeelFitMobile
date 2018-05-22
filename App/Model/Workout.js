@@ -65,20 +65,11 @@ export default class Workout {
     }
 
     get Temperature() {
-        return `${this.weather.temperature || 'N/A'} ℃`;
+        return `${this.weather.temperature || '0'}°`;
     }
 
     get Activity() {
         
-        switch (this.activity) {
-            case MotionMapper.WALKING:
-                return 'Walking';
-            case MotionMapper.RUNNING:
-                return 'Running';
-            case MotionMapper.BIKING:
-                return 'Biking';
-            default:
-                return 'Unknown';
-        }
+        return this.activity;
     }
 }

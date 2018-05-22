@@ -6,10 +6,10 @@ import _ from 'lodash';
 export const getAltitude = (movementData) => {
 
   if (!movementData) {
-    return 'N/A m';
+    return '0';
   }
 
-  return Number.parseInt(movementData.altitude) + ' m';
+  return Number.parseInt(movementData.altitude);
 };
 
 export const getMinAltitude = (movementData) => {
@@ -29,10 +29,10 @@ export const getMaxAltitude = (movementData) => {
 export const getSpeed = (movementData) => {
 
   if (!movementData) {
-    return 'N/A km/h';
+    return 0.0;
   }
 
-  return (movementData.speed * 3.6).toFixed(1) + ' km/h';
+  return (movementData.speed * 3.6).toFixed(1);
 };
 
 export const getMinSpeed = (movementData) => {
@@ -52,10 +52,10 @@ export const getMaxSpeed = (movementData) => {
 export const getAvgSpeed = (movementData) => {
 
   if (movementData.length === 0) {
-    return 'N/A km/h';
+    return 0.0;
   }
 
-  return (_.reduce(_.filter(movementData, mD => mD.speed > 0), (sum, mD) => sum + mD.speed, 0) / (movementData.length * 3.6)).toFixed(1) + ' km/h';
+  return (_.reduce(_.filter(movementData, mD => mD.speed > 0), (sum, mD) => sum + mD.speed, 0) / (movementData.length * 3.6)).toFixed(1);
 };
 
 const getDistanceRaw = (route) => {
@@ -76,10 +76,10 @@ export const getDistance = (route) => {
   let distance = getDistanceRaw(route);
 
   if (!distance) {
-    distance = 'N/A'
+    distance = 0;
   }
 
-  return distance + ' km';
+  return distance;
 };
 
 export const getAvgPace = (seconds, route) => {
@@ -87,10 +87,10 @@ export const getAvgPace = (seconds, route) => {
   let distance = getDistanceRaw(route);
 
   if (!distance) {
-    return 'N/A mins / km'
+    return '00:00';
   }
 
-  return `${moment.unix(seconds / 60).subtract(2, 'hours').format('mm:ss')} / km`
+  return `${moment.unix(seconds / 60).subtract(2, 'hours').format('mm:ss')}`
 };
 
 export const getTime = (seconds) => {
