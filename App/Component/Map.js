@@ -4,6 +4,7 @@ import MapView from 'react-native-maps';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import MotionMapper from '../Util/MotionMapper';
+import MapStyle from '../Style/MapStyle';
 
 const styles = StyleSheet.create({
   map: {
@@ -109,7 +110,14 @@ class Map extends React.Component {
 
     return (
         <MapView
-          style={styles.map}>
+          style={styles.map}
+          customMapStyle={MapStyle}
+          minZoomLevel={10}
+          region={region}
+          showsTraffic={true}
+          showsScale={true}
+          showsCompas={true}
+          pitchEnabled={false}>
 
           <MapView.Marker
             coordinate={coords}/>
