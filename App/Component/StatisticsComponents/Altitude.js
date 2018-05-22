@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Text, Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
+import { connect } from 'react-redux';
+import { getAltitude, getMinAltitude, getMaxAltitude } from '../../Util/MovementStatistics';
 import ViewStyle from '../../Style/ViewStyle';
 import { indicatorStyle } from '../../Style/FontStyle';
 
 
-export default class Altitude extends Component {
+class Altitude extends Component {
 
   constructor(props) {
     super(props);
@@ -20,6 +22,18 @@ export default class Altitude extends Component {
         visible: true
       });
    }, 100);
+  }
+
+  altitude() {
+    return getAltitude(this.props.movementData);
+  }
+
+  minAltitude() {
+    return getMinAltitude(this.props.movementData);
+  }
+
+  maxAltitude() {
+    return getMaxAltitude(this.props.movementData);
   }
 
   render() {
@@ -43,7 +57,7 @@ export default class Altitude extends Component {
               name={'mountains'}
               type={'foundation'} 
               size={60} />
-            <Text style={indicatorStyle}>{this.props.altitude}</Text>
+            <Text style={indicatorStyle}>{this.altitude()}</Text>
           </View>
 
           <View style={screen}>
@@ -55,7 +69,7 @@ export default class Altitude extends Component {
               name={'mountains'}
               type={'foundation'} 
               size={60} />
-            <Text style={indicatorStyle}>{this.props.minAltitude}</Text>
+            <Text style={indicatorStyle}>{this.minAltitude()}</Text>
           </View>
           
           <View style={screen}>
@@ -67,10 +81,16 @@ export default class Altitude extends Component {
               name={'mountains'}
               type={'foundation'} 
               size={60} />
-            <Text style={indicatorStyle}>{this.props.maxAltitude}</Text>
+            <Text style={indicatorStyle}>{this.maxAltitude()}</Text>
           </View>
         </Swiper>
       </View>
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  movementData: state.Route.movementData
+});
+
+export default connect(mapStateToProps, {})(Altitude);

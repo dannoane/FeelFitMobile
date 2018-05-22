@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Text, Icon } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
+import { connect } from 'react-redux';
+import { getSpeed, getMinSpeed, getAvgSpeed, getMaxSpeed } from '../../Util/MovementStatistics';
 import ViewStyle from '../../Style/ViewStyle';
 import { indicatorStyle } from '../../Style/FontStyle';
 
-
-export default class Speed extends Component {
+class Speed extends Component {
 
   constructor(props) {
     super(props);
@@ -20,6 +21,22 @@ export default class Speed extends Component {
         visible: true
       });
    }, 100);
+  }
+
+  speed() {
+    return getSpeed(this.props.movementData);
+  }
+
+  minSpeed() {
+    return getMinSpeed(this.props.movementData);
+  }
+
+  avgSpeed() {
+    return getAvgSpeed(this.props.movementData);
+  }
+
+  maxSpeed() {
+    return getMaxSpeed(this.props.movementData);
   }
 
   render() {
@@ -44,7 +61,7 @@ export default class Speed extends Component {
               type={'material-community'} 
               size={50}
               style={{marginRight: 15}} />
-            <Text style={indicatorStyle}>{this.props.speed}</Text>
+            <Text style={indicatorStyle}>{this.speed()}</Text>
           </View>
           
           <View style={screen}>
@@ -56,7 +73,7 @@ export default class Speed extends Component {
               name={'speedometer'}
               type={'material-community'} 
               size={50} />
-            <Text style={indicatorStyle}>{this.props.minSpeed}</Text>
+            <Text style={indicatorStyle}>{this.minSpeed()}</Text>
           </View>
           
           <View style={screen}>
@@ -68,7 +85,7 @@ export default class Speed extends Component {
               name={'speedometer'}
               type={'material-community'} 
               size={50} />
-            <Text style={indicatorStyle}>{this.props.avgSpeed}</Text>
+            <Text style={indicatorStyle}>{this.avgSpeed()}</Text>
           </View>
           
           <View style={screen}>
@@ -80,10 +97,16 @@ export default class Speed extends Component {
               name={'speedometer'}
               type={'material-community'} 
               size={50} />
-            <Text style={indicatorStyle}>{this.props.maxSpeed}</Text>
+            <Text style={indicatorStyle}>{this.maxSpeed()}</Text>
           </View>
         </Swiper>
       </View>
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  movementData: state.Route.movementData
+});
+
+export default connect(mapStateToProps, {})(Speed);

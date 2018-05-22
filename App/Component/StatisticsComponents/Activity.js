@@ -1,38 +1,37 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
 import MotionMapper from './../../Util/MotionMapper';
 
-export default class Activity extends Component {
+class Activity extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {icon: 'human-handsdown'};
     }
 
-    componentDidMount() {
-        this.setIcon();        
-    }
+    getIcon() {
 
-    setIcon() {
-
-        switch (this.activity) {
+        switch (this.props.activity) {
             case MotionMapper.WALKING:
-                this.setState({icon: 'walk'});
+                return 'walk';
             case MotionMapper.RUNNING:
-                this.setState({icon: 'run'});
+                return 'run';
             case MotionMapper.BIKING:
-                this.setState({icon: 'bike'});
+                return 'bike';
+            default:
+                return 'human-handsdown';
         }
     }
 
     render() {
 
+        const icon = this.getIcon();
+
         return (
             <View style={this.props.style}>
                 <Icon 
-                    name={this.state.icon} 
+                    name={icon} 
                     color='black'
                     type={'material-community'}
                     size={60} />
@@ -40,3 +39,9 @@ export default class Activity extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => ({
+    activity: state.Route.activity
+});
+
+export default connect(mapStateToProps, {})(Activity);

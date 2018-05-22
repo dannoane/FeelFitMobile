@@ -8,7 +8,7 @@ const Route = (state, action) => {
       hasLocation: false,
       route: [],
       movementData: [],
-      weather: {},
+      weather: {temperature: 0},
       activity: '',
     }
   }

@@ -3,10 +3,17 @@ import * as helpers from '@turf/helpers';
 import moment from 'moment';
 import _ from 'lodash';
 
+export const getCurrentPosition = (route) => {
+  
+  return _.last(_.last(route));
+}
+
 export const getAltitude = (movementData) => {
 
+  movementData = _.last(movementData);
+
   if (!movementData) {
-    return '0';
+    return 0;
   }
 
   return Number.parseInt(movementData.altitude);
@@ -27,6 +34,8 @@ export const getMaxAltitude = (movementData) => {
 };
 
 export const getSpeed = (movementData) => {
+
+  movementData = _.last(movementData);
 
   if (!movementData) {
     return 0.0;

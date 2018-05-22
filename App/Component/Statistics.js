@@ -3,7 +3,6 @@ import { AppState, View, Switch } from 'react-native';
 import { Icon, Divider } from 'react-native-elements';
 import { connect } from 'react-redux';
 import ViewStyle from './../Style/ViewStyle';
-import WorkoutModel from '../Model/Workout';
 import { addRouteSegment, setWorkoutState } from './../Action';
 import { Activity, Altitude, AveragePace, Distance, Speed, Temperature, Time } from './StatisticsComponents';
 import * as Timer from './../Util/Timer';
@@ -49,7 +48,7 @@ class Statistics extends Component {
 
   toggleWorkout() {
 
-    if (this.props.workoutState === 'stopped') {
+    if (this.props.workoutState === 'stopped' || this.props.workoutState === 'paused') {
       this.props.onWorkoutStateChange('started');
       this.props.onWorkoutStart();
     }
@@ -64,9 +63,6 @@ class Statistics extends Component {
   }
 
   render() {
-
-    const { time, workoutState, route, movementData, weather, activity } = this.props;
-    const workout = new WorkoutModel(time, workoutState, route, movementData, weather, activity);
 
     const view = new ViewStyle()
       .flex(1)
@@ -96,56 +92,31 @@ class Statistics extends Component {
     return (
       <View style={view}>
         <View style={normalGrid}>
-          <Distance
-            style={indicator}
-            distance={workout.Distance} />
-          
+          <Distance style={indicator} />
           <View style={{borderLeftWidth: 1, borderLeftColor: 'black'}}/>
-
-          <Speed
-            style={indicator}
-            speed={workout.Speed}
-            minSpeed={workout.MinSpeed}
-            avgSpeed={workout.AvgSpeed}
-            maxSpeed={workout.MaxSpeed} />
+          <Speed style={indicator} />
         </View>
 
         <Divider style={{ backgroundColor: 'black' }} />
         
         <View style={normalGrid}>
-          <Altitude
-            style={indicator}
-            altitude={workout.Altitude}
-            minAltitude={workout.MinAltitude}
-            maxAltitude={workout.MaxAltitude} />
-          
+          <Altitude style={indicator} />
           <View style={{borderLeftWidth: 1, borderLeftColor: 'black'}}/>
-          
-          <Activity
-            style={indicator}
-            activity={workout.Activity} />
+          <Activity style={indicator} />
         </View>
 
         <Divider style={{ backgroundColor: 'black' }} />
 
         <View style={bigGrid}>
-          <Time
-            style={indicator}
-            time={workout.Time} />
+          <Time style={indicator} />
         </View>
 
         <Divider style={{ backgroundColor: 'black' }} />
 
         <View style={normalGrid}>
-          <AveragePace
-            style={indicator}
-            avgPace={workout.AvgPace} />
-
+          <AveragePace style={indicator} />
           <View style={{borderLeftWidth: 1, borderLeftColor: 'black'}}/>    
-
-          <Temperature
-            style={indicator}
-            temperature={workout.Temperature} />
+          <Temperature style={indicator} />
         </View>
 
         <Divider style={{ backgroundColor: 'black' }} />
@@ -175,12 +146,7 @@ class Statistics extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  route: state.Route.route,
-  time: state.Route.time,
-  workoutState: state.Route.workoutState,
-  movementData: state.Route.movementData,
-  weather: state.Route.weather,
-  activity: state.Route.activity
+  workoutState: state.Route.workoutState
 });
 
 const mapDispatchToProps = {

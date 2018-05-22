@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Text, Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { getTime } from '../../Util/MovementStatistics';
 import { bigIndicatorStyle } from '../../Style/FontStyle';
 
-export default class Time extends Component {
+class Time extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  time() {
+    return getTime(this.props.time);
   }
 
   render() {
@@ -18,8 +24,14 @@ export default class Time extends Component {
           type={'material-community'} 
           size={70}
           style={{marginRight: 15}} />
-        <Text style={bigIndicatorStyle}>{this.props.time}</Text>
+        <Text style={bigIndicatorStyle}>{this.time()}</Text>
       </View>
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  time: state.Route.time
+});
+
+export default connect(mapStateToProps, {})(Time);
