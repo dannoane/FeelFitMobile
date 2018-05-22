@@ -16,13 +16,12 @@ const Geolocation = () => {
         store.dispatch(addMovementData(movementData));
       }
     },
-      (err) => {
-        console.log(err.code, err.message);
-      },
-      {
-        timeout: 20000,
-        enableHighAccuracy: true,
-      });
+    (err) => {
+      console.log(err.code, err.message);
+    },
+    {
+      enableHighAccuracy: true,
+    });
   }
   else if (route.workoutState !== 'started' && watchId !== null) {
     navigator.geolocation.clearWatch(watchId);
