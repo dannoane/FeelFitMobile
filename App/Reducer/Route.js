@@ -1,62 +1,68 @@
+import Immutable from 'immutable';
+
+const RouteRecord = Immutable.Record({
+  time: 0,
+  workoutState: 'stopped',
+  hasLocation: false,
+  route: Immutable.List(),
+  movementData: Immutable.List(),
+  weather: {temperature: 0},
+  activity: ''
+});
 
 const Route = (state, action) => {
 
   if (!state) {
-    state = {
-      time: 0,
-      workoutState: 'stopped',
-      hasLocation: false,
-      route: [],
-      movementData: [],
-      weather: {temperature: 0},
-      activity: '',
-    }
+    state = new RouteRecord();
   }
 
   switch (action.type) {
     case 'ADD_ROUTE_SEGMENT':
-      return Object.assign({}, state, { route : [...state.route, []]});
+      return state.set('route', state.get('route').push(Immutable.List()));
     
     case 'ADD_POSITION':
-      return Object.assign({}, state, { hasLocation: true, route: state.route.map((seg, index) => {
-        if (index === state.route.length - 1) {
-          return [...seg, Object.assign({}, action.value, { time: state.time })];
-        }
+      let route = state.get('route');
+      action.value.time = state.get('time');
 
-        return seg;
-      })});
+      return state
+        .set('hasLocation', true)
+        .set('route', route.butLast().push(route.last().push(action.value)));
     
     case 'INCREMENT_TIME':
-      return Object.assign({}, state, { time: state.time + 1 });
+      return state.set('time', state.get('time') + 1);
     
     case 'SET_TIME':
-      return Object.assign({}, state, { time: state.time + action.value });
+      return state.set('time', state.get('time') + action.value);
     
     case 'SET_WORKOUT_STATE':
-      let hasLocation = state.hasLocation;
-      if (action.value !== 'started') {
-        hasLocation = false;
-      }
+      let hasLocation = action.value !== 'started' ? false : state.get('hasLocation');
 
-      return Object.assign({}, state, { workoutState: action.value, hasLocation: hasLocation });
+      return state
+        .set('workoutState', action.value)
+        .set('hasLocation', hasLocation);
     
     case 'ADD_MOVEMENT_DATA':
-      return Object.assign({}, state, { movementData: [...state.movementData, action.value] });
+      let movementData = state.get('movementData');
+
+      return state.set('movementData', state.get('movementData').push(action.value));
     
     case 'SET_WEATHER':
-      return Object.assign({}, state, { weather: action.value });
+      return state.set('weather', action.value);
     
     case 'SET_ACTIVITY':
-      return Object.assign({}, state, { activity: action.value, route: state.route.map(seg =>
-          seg.map(p => {
-            if (!p.activity) {
-              p.activity = action.value;
-            }
+      let updatedRoute = state
+        .get('route')
+        .map(seg => seg.map(loc => {
+          if (!loc.activity) {
+            loc.activity = action.value;
+          }
 
-            return p;
-          })
-        ) 
-      });
+          return loc;
+        }));
+
+      return state
+        .set('activity', action.value)
+        .set('route', updatedRoute);
     
     default:
       return state;
