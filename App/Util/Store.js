@@ -7,8 +7,7 @@ import Weather from './Weather';
 import Motion from './Motion';
 
 const loadState = () => {
-  return { UserState: { loggedIn: true } };
-  //return undefined;
+  return undefined;
 };
 
 const saveState = (state) => {

@@ -5,7 +5,7 @@ const UserRecord = Immutable.Record({
   accessToken: undefined
 });
 
-const UserState = (state = {}, action) => {
+const UserState = (state, action) => {
 
   if (!state) {
     state = new UserRecord();
