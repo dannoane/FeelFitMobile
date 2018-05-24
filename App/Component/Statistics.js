@@ -146,7 +146,7 @@ class Statistics extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  workoutState: state.Route.workoutState
+  workoutState: state.Route.get('workoutState')
 });
 
 const mapDispatchToProps = {

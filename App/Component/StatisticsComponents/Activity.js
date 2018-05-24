@@ -41,7 +41,7 @@ class Activity extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    activity: state.Route.activity
+    activity: state.Route.get('activity')
 });
 
 export default connect(mapStateToProps, {})(Activity);

@@ -31,7 +31,7 @@ class Temperature extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  weather: state.Route.weather
+  weather: state.Route.get('weather')
 });
 
 export default connect(mapStateToProps, {})(Temperature);

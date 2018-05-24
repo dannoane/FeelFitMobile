@@ -106,7 +106,7 @@ class Speed extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  movementData: state.Route.movementData
+  movementData: state.Route.get('movementData')
 });
 
 export default connect(mapStateToProps, {})(Speed);

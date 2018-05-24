@@ -32,8 +32,8 @@ class AveragePace extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  route: state.Route.route,
-  time: state.Route.time
+  route: state.Route.get('route'),
+  time: state.Route.get('time')
 });
 
 export default connect(mapStateToProps, {})(AveragePace);

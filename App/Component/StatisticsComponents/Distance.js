@@ -31,7 +31,7 @@ class Distance extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  route: state.Route.route
+  route: state.Route.get('route')
 });
 
 export default connect(mapStateToProps, {})(Distance);

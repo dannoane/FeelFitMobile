@@ -31,7 +31,7 @@ class Time extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  time: state.Route.time
+  time: state.Route.get('time')
 });
 
 export default connect(mapStateToProps, {})(Time);

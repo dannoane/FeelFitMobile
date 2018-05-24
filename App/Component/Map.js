@@ -3,6 +3,8 @@ import { StyleSheet, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import Immutable from 'immutable';
+import { getCurrentPosition } from '../Util/MovementStatistics';
 import MotionMapper from '../Util/MotionMapper';
 import MapStyle from '../Style/MapStyle';
 
@@ -23,7 +25,7 @@ class Map extends React.Component {
     this.longitudeDelta = this.latitudeDelta * (width / height);
   }
 
-  _calculateRegion(coords) {
+  calculateRegion(coords) {
 
     return {
       latitude: coords.latitude,
@@ -33,12 +35,12 @@ class Map extends React.Component {
     };
   }
 
-  _getCurrentPosition(route) {
+  currentPosition(route) {
 
-    return _.last(_.last(route)) || { latitude: 47.051389, longitude: 21.940278 };
+    return getCurrentPosition(route) || { latitude: 47.051389, longitude: 21.940278 };
   }
 
-  _getColor(activity) {
+  getColor(activity) {
 
     let color;
 
@@ -60,53 +62,53 @@ class Map extends React.Component {
     return color;
   }
 
-  _partitionSegmentsByActivity(segment) {
+  partitionSegmentsByActivity(segment) {
 
-    if (!segment || segment.length < 2) {
+    if (!segment || segment.size < 2) {
       return;
     }
 
-    let polylines = [];
+    let polylines = Immutable.List();
     let polyline = [];
 
-    for (let i = 0; i < segment.length; ++i) {
-      polyline.push(segment[i]);
+    for (let i = 0; i < segment.size; ++i) {
+      polyline.push(segment.get(i));
 
-      if (segment[i + 1].activity !== segment[i].activity) {
-        polyline.push(segment[i + 1]);
-        polylines.push({ polyine, activity: segment[i].activity });
+      if (!segment.get(i + 1)) {
+        polylines.push({polyine, activity: segment.get(i).activity});
+        polyline = [];
+      }
+      else if (segment.get(i + 1).activity !== segment.get(i).activity) {
+        polyline.push(segment.get(i + 1));
+        polylines.push({polyine, activity: segment.get(i).activity});
 
         polyline = [];
       }
     }
 
-    if (polyline.length > 0) {
-      polylines.push({ polyine, activity: _.last(segment).activity });
-    }
-
     return polylines;
   }
 
-  _mapSegmentsToPolylines(segment) {
+  mapSegmentsToPolylines(segment) {
 
     if (!segment) {
       return;
     }
 
-    let color = this._getColor(segment.activity);
+    let color = this.getColor(segment.activity);
 
     return (<MapView.Polyline
       strokeWidth={3}
       strokeColor={color}
-      coordinates={segment.polyine}
+      coordinates={segment.polyine.toJS()}
       geodesic={true} />);
   }
 
   render() {
 
     const route = this.props.route;
-    const coords = this._getCurrentPosition(route);
-    const region = this._calculateRegion(coords);
+    const coords = this.currentPosition(route);
+    const region = this.calculateRegion(coords);
 
     return (
         <MapView
@@ -122,14 +124,20 @@ class Map extends React.Component {
           <MapView.Marker
             coordinate={coords}/>
 
-          {_.map(_.flatten(_.map(route, this._partitionSegmentsByActivity)), this._mapSegmentsToPolylines)}
+          {
+            route
+              .map(seg => this.partitionSegmentsByActivity(seg))
+              .flatten()
+              .map(seg => this.mapSegmentsToPolylines(seg))
+              .toJS()
+          }
         </MapView>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  route: state.Route.route
+  route: state.Route.get('route')
 });
 
 const mapDispatchToProps = {};
