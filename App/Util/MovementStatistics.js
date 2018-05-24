@@ -5,90 +5,101 @@ import _ from 'lodash';
 
 export const getCurrentPosition = (route) => {
   
-  return _.last(_.last(route));
+  let lastSegment = route.last();
+  
+  if (lastSegment) {
+    return lastSegment.last();
+  }
+
+  return undefined;
 }
 
 export const getAltitude = (movementData) => {
 
-  movementData = _.last(movementData);
+  let md = movementData.last() || {};
 
-  if (!movementData) {
-    return 0;
-  }
-
-  return Number.parseInt(movementData.altitude);
+  return Number.parseInt(md.altitude || 0);
 };
+
+const toAltitude = (altitude) => {
+
+  return Number.parseInt(altitude) || 0;
+}
 
 export const getMinAltitude = (movementData) => {
 
-  return getAltitude(
-    _.minBy(_.filter(movementData, mD => mD.altitude > 0), mD => mD.altitude)
-  );
+  let minVal = movementData
+    .filter(md => md.altitude > 0)
+    .minBy(md => md.altitude) || {};
+
+  return toAltitude(minVal.altitude);
 };
 
 export const getMaxAltitude = (movementData) => {
 
-  return getAltitude(
-    _.maxBy(_.filter(movementData, mD => mD.altitude > 0), mD => mD.altitude)
-  );
+  let maxVal = movementData
+    .maxBy(md => md.altitude) || {};
+
+  return toAltitude(maxVal.altitude);
 };
+
+const toSpeed = (speed) => {
+
+  return ((speed * 3.6) || 0).toFixed(1);
+}
 
 export const getSpeed = (movementData) => {
 
-  movementData = _.last(movementData);
+  let md = movementData.last() || {};
 
-  if (!movementData) {
-    return 0.0;
-  }
-
-  return (movementData.speed * 3.6).toFixed(1);
+  return toSpeed(md.speed);
 };
 
 export const getMinSpeed = (movementData) => {
 
-  return getSpeed(
-    _.minBy(_.filter(movementData, mD => mD.speed > 0), mD => mD.speed)
-  );
+  let minVal = movementData
+    .filter(md => md.speed > 0)
+    .minBy(md => md.speed) || {};
+
+  return toSpeed(minVal.speed);
 };
 
 export const getMaxSpeed = (movementData) => {
 
-  return getSpeed(
-    _.maxBy(_.filter(movementData, mD => mD.speed > 0), mD => mD.speed)
-  );
+  let maxVal = movementData
+    .maxBy(md => md.speed) || {};
+
+  return toSpeed(maxVal.speed);
 };
 
 export const getAvgSpeed = (movementData) => {
 
-  if (movementData.length === 0) {
-    return 0.0;
+  if (movementData.size === 0) {
+    return toSpeed();
   }
 
-  return (_.reduce(_.filter(movementData, mD => mD.speed > 0), (sum, mD) => sum + mD.speed, 0) / (movementData.length * 3.6)).toFixed(1);
+  let mdBiggerThanZero = movementData
+    .filter(md => md.speed > 0);
+  
+  return toSpeed(mdBiggerThanZero
+    .reduce((sum, md) => sum + md.speed, 0) 
+    / mdBiggerThanZero.size);
 };
 
 const getDistanceRaw = (route) => {
 
-  let segments = route.filter(seg => seg.length > 1).map(seg => seg.map(point => [point.latitude, point.longitude]));
-  let distance = 0;
-
-  for (segment of segments) {
-    let line = helpers.lineString(segment);
-    distance += lineDistance(line, 'kilometers');
-  }
-
-  return distance.toFixed(2);
+  return route
+    .filter(seg => seg.size > 1)
+    .map(seg => seg.map(point => [point.latitude, point.longitude]))
+    .reduce((dist, seg) => {
+      let line = helpers.lineString(seg);
+      dist += lineDistance(line, 'kilometers');
+    }, 0).toFixed(2);
 };
 
 export const getDistance = (route) => {
 
-  let distance = getDistanceRaw(route);
-
-  if (!distance) {
-    distance = 0;
-  }
-
-  return distance;
+  return getDistanceRaw(route);
 };
 
 export const getAvgPace = (seconds, route) => {
