@@ -1,11 +1,21 @@
+import Immutable from 'immutable';
+
+const UserRecord = Immutable.Record({
+  loggedIn: true,
+  accessToken: undefined
+});
 
 const UserState = (state = {}, action) => {
 
+  if (!state) {
+    state = new UserRecord();
+  }
+
   switch (action.type) {
     case 'SET_LOG_IN_STATUS':
-      return Object.assign({}, state, { loggedIn: action.value });
+      return state.set('loggedIn', action.value);
     case 'SET_ACCESS_TOKEN':
-      return Object.assign({}, state, { accessToken: action.value });
+      return state.set('accessToken', action.value);
     default:
       return state;
   }

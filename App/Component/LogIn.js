@@ -116,7 +116,7 @@ class LogIn extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  loggedIn: state.UserState.loggedIn
+  loggedIn: state.UserState.get('loggedIn')
 });
 
 const mapDispatchToProps = {
