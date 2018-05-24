@@ -88,13 +88,13 @@ export const getAvgSpeed = (movementData) => {
 
 const getDistanceRaw = (route) => {
 
-  return route
+  return (route
     .filter(seg => seg.size > 1)
     .map(seg => seg.map(point => [point.latitude, point.longitude]))
     .reduce((dist, seg) => {
-      let line = helpers.lineString(seg);
-      dist += lineDistance(line, 'kilometers');
-    }, 0).toFixed(2);
+      let line = helpers.lineString(seg.toJS());
+      return dist + lineDistance(line, 'kilometers');
+    }, 0) || 0).toFixed(2);
 };
 
 export const getDistance = (route) => {
