@@ -75,12 +75,12 @@ class Map extends React.Component {
       polyline.push(segment.get(i));
 
       if (!segment.get(i + 1)) {
-        polylines.push({polyine, activity: segment.get(i).activity});
+        polylines = polylines.push({polyline, activity: segment.get(i).activity});
         polyline = [];
       }
       else if (segment.get(i + 1).activity !== segment.get(i).activity) {
         polyline.push(segment.get(i + 1));
-        polylines.push({polyine, activity: segment.get(i).activity});
+        polylines = polylines.push({polyline, activity: segment.get(i).activity});
 
         polyline = [];
       }
@@ -100,7 +100,9 @@ class Map extends React.Component {
     return (<MapView.Polyline
       strokeWidth={3}
       strokeColor={color}
-      coordinates={segment.polyine.toJS()}
+      lineCap={'butt'}
+      lineJoin={'round'}
+      coordinates={segment.polyline}
       geodesic={true} />);
   }
 
