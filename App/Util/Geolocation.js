@@ -6,7 +6,7 @@ const Geolocation = () => {
 
   let route = store.getState().Route;
 
-  if (route.workoutState === 'started' && watchId === null) {
+  if (route.get('workoutState') === 'started' && watchId === null) {
     watchId = navigator.geolocation.watchPosition((data) => {
 
       let { latitude, longitude, ...movementData } = data.coords;
@@ -23,7 +23,7 @@ const Geolocation = () => {
       enableHighAccuracy: true,
     });
   }
-  else if (route.workoutState !== 'started' && watchId !== null) {
+  else if (route.get('workoutState') !== 'started' && watchId !== null) {
     navigator.geolocation.clearWatch(watchId);
     watchId = null;
   }

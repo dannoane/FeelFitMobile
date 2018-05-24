@@ -14,11 +14,11 @@ const Motion = async () => {
 
     let state = store.getState();
 
-    if (state.Route.workoutState === 'started' && !observablesAvailable()) {
+    if (state.Route.get('workoutState') === 'started' && !observablesAvailable()) {
         await createObservables();
         mergeObservablesAndSubscribe();
     }
-    else if (state.Route.workoutState !== 'started' && observablesAvailable()) {
+    else if (state.Route.get('workoutState') !== 'started' && observablesAvailable()) {
         destroyObservables();
     }
 };

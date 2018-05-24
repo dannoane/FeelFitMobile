@@ -37,7 +37,7 @@ const computeTime = (time) => {
 
   let elapsedTime = 0;
   let state = store.getState();
-  let workoutState = state.Route.workoutState;
+  let workoutState = state.Route.get('workoutState');
 
   if (workoutState === 'started') {
     elapsedTime = Math.floor((Date.now() - time) / 1000);
@@ -48,13 +48,13 @@ const computeTime = (time) => {
 
 const initTimer = () => {
 
-  Rx.Observable
-    .interval(1000)
-    .filter(_ => {
-      let state = store.getState();
-      return state.Route.workoutState === 'started';
-    })
-    .subscribe(_ => store.dispatch(incrementTime()));
+  setInterval(() => {
+    let route = store.getState().Route;
+
+    if (route.get('workoutState') === 'started') {
+      store.dispatch(incrementTime());
+    }
+  }, 1000);
 };
 
 export { init, loadTime, storeTime };
