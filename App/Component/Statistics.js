@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppState, View, Switch } from 'react-native';
+import { AppState, View, Switch, Alert } from 'react-native';
 import { Icon, Divider } from 'react-native-elements';
 import { connect } from 'react-redux';
 import ViewStyle from './../Style/ViewStyle';
@@ -60,6 +60,19 @@ class Statistics extends Component {
   stopWorkout() {
 
     this.props.onWorkoutStateChange('stopped');
+  }
+
+  displayAlert() {
+
+    Alert.alert(
+      'Stop workout!',
+      'Are you sure you want to stop the workout?',
+      [
+        {text: 'Yes', onPress: () => this.stopWorkout()},
+        {text: 'No', onPress: () => console.log('')}
+      ],
+      {cancelable: false}
+    )
   }
 
   render() {
@@ -128,9 +141,9 @@ class Statistics extends Component {
             type='material-community'
             raised
             size={25}
-            onPress={() => this.stopWorkout()} />
+            onPress={() => this.displayAlert()} />
           <Icon
-            name='play'
+            name={this.props.workoutState === 'started' ? 'pause' : 'play'}
             color='black'
             type = 'material-community'   
             raised         
