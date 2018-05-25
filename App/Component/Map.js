@@ -14,6 +14,8 @@ const styles = StyleSheet.create({
   }
 });
 
+let mapPolylineId = 0;
+
 class Map extends React.Component {
 
   constructor(props) {
@@ -96,8 +98,10 @@ class Map extends React.Component {
     }
 
     let color = this.getColor(segment.activity);
+    mapPolylineId += 1;
 
     return (<MapView.Polyline
+      key={mapPolylineId}
       strokeWidth={3}
       strokeColor={color}
       lineCap={'butt'}
