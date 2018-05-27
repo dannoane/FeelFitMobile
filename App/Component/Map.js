@@ -4,7 +4,7 @@ import MapView from 'react-native-maps';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
-import { getCurrentPosition } from '../Util/MovementStatistics';
+import { getCurrentPosition, partitionRouteByActivity } from '../Util/MovementStatistics';
 import MotionMapper from '../Util/MotionMapper';
 import MapStyle from '../Style/MapStyle';
 
@@ -64,33 +64,6 @@ class Map extends React.Component {
     return color;
   }
 
-  partitionSegmentsByActivity(segment) {
-
-    if (!segment || segment.size < 2) {
-      return;
-    }
-
-    let polylines = Immutable.List();
-    let polyline = [];
-
-    for (let i = 0; i < segment.size; ++i) {
-      polyline.push(segment.get(i));
-
-      if (!segment.get(i + 1)) {
-        polylines = polylines.push({polyline, activity: segment.get(i).activity});
-        polyline = [];
-      }
-      else if (segment.get(i + 1).activity !== segment.get(i).activity) {
-        polyline.push(segment.get(i + 1));
-        polylines = polylines.push({polyline, activity: segment.get(i).activity});
-
-        polyline = [];
-      }
-    }
-
-    return polylines;
-  }
-
   mapSegmentsToPolylines(segment) {
 
     if (!segment) {
@@ -131,9 +104,7 @@ class Map extends React.Component {
             coordinate={coords}/>
 
           {
-            route
-              .map(seg => this.partitionSegmentsByActivity(seg))
-              .flatten()
+            partitionRouteByActivity(route)
               .map(seg => this.mapSegmentsToPolylines(seg))
               .toJS()
           }

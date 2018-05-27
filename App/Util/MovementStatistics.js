@@ -1,7 +1,7 @@
 import lineDistance from '@turf/line-distance';
 import * as helpers from '@turf/helpers';
 import moment from 'moment';
-import _ from 'lodash';
+import Immutable from 'immutable';
 
 export const getCurrentPosition = (route) => {
   
@@ -116,4 +116,43 @@ export const getAvgPace = (seconds, route) => {
 export const getTime = (seconds) => {
 
   return moment.unix(seconds).subtract(2, 'hours').format('HH:mm:ss');
+};
+
+const partitionSegmentsByActivity = (segment) => {
+
+  if (!segment || segment.size < 2) {
+    return;
+  }
+
+  let polylines = Immutable.List();
+  let polyline = [];
+
+  for (let i = 0; i < segment.size; ++i) {
+    polyline.push(segment.get(i));
+
+    if (!segment.get(i + 1)) {
+      polylines = polylines.push({
+        polyline,
+        activity: segment.get(i).activity
+      });
+      polyline = [];
+    } else if (segment.get(i + 1).activity !== segment.get(i).activity) {
+      polyline.push(segment.get(i + 1));
+      polylines = polylines.push({
+        polyline,
+        activity: segment.get(i).activity
+      });
+
+      polyline = [];
+    }
+  }
+
+  return polylines;
+}
+
+export const partitionRouteByActivity = (route) => {
+
+  return route
+    .map(seg => partitionSegmentsByActivity(seg))
+    .flatten();
 };
