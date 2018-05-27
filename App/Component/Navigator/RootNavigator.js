@@ -3,11 +3,13 @@ import LogIn from './../LogIn';
 import SignUp from './../SignUp';
 import { mapNavigationStateParamsToProps } from "./Util/index";
 import MainNavigator from "./MainNavigator";
+import SaveWorkout from '../SaveWorkout';
 
 const RootNavigator = StackNavigator({
     LogIn: { screen: mapNavigationStateParamsToProps(LogIn) },
     SignUp: { screen: mapNavigationStateParamsToProps(SignUp) },
-    Main: { screen: MainNavigator }
+    Main: { screen: MainNavigator },
+    SaveWorkout: { screen: SaveWorkout }
   },
   {
     headerMode: 'none',
@@ -22,7 +24,7 @@ RootNavigator.router.getStateForAction = (action, state) => {
   if (
     state &&
     action.type === NavigationActions.BACK &&
-    state.routes[state.index].routeName.equals('Main') && state.routes[state.index - 1].routeName.equals('LogIn')
+    !state.routes[state.index].routeName.equals('SignUp') && !state.routes[state.index - 1].routeName.equals('LogIn')
   ) {
     return null;
   }
