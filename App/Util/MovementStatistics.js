@@ -102,15 +102,20 @@ export const getDistance = (route) => {
   return getDistanceRaw(route);
 };
 
-export const getAvgPace = (seconds, route) => {
+export const getAvgPaceInSeconds = (seconds, route) => {
 
-  let distance = getDistanceRaw(route);
+  let distance = Number.parseFloat(getDistanceRaw(route));
 
   if (!distance) {
-    return '00:00';
+    return 0;
   }
 
-  return `${moment.unix(seconds / 60).subtract(2, 'hours').format('mm:ss')}`
+  return seconds / distance;
+}
+
+export const getAvgPace = (seconds, route) => {
+
+  return `${moment.unix(getAvgPaceInSeconds(seconds, route)).format('mm:ss')}`
 };
 
 export const getTime = (seconds) => {
@@ -128,7 +133,11 @@ const partitionSegmentsByActivity = (segment) => {
   let polyline = [];
 
   for (let i = 0; i < segment.size; ++i) {
-    polyline.push(segment.get(i));
+    polyline.push({
+      latitude: segment.get(i).latitude,
+      longitude: segment.get(i).longitude,
+      time: segment.get(i).time
+    });
 
     if (!segment.get(i + 1)) {
       polylines = polylines.push({
@@ -136,8 +145,13 @@ const partitionSegmentsByActivity = (segment) => {
         activity: segment.get(i).activity
       });
       polyline = [];
-    } else if (segment.get(i + 1).activity !== segment.get(i).activity) {
-      polyline.push(segment.get(i + 1));
+    } 
+    else if (segment.get(i + 1).activity !== segment.get(i).activity) {
+      polyline.push({
+        latitude: segment.get(i + 1).latitude,
+        longitude: segment.get(i + 1).longitude,
+        time: segment.get(i + 1).time
+      });
       polylines = polylines.push({
         polyline,
         activity: segment.get(i).activity
