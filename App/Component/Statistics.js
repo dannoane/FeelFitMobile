@@ -60,6 +60,7 @@ class Statistics extends Component {
   stopWorkout() {
 
     this.props.onWorkoutStateChange('stopped');
+    this.props.navigation.navigate('SaveWorkout');
   }
 
   displayAlert() {
@@ -80,6 +81,7 @@ class Statistics extends Component {
     const view = new ViewStyle()
       .flex(1)
       .flexDirection('column')
+      .custom({backgroundColor: '#fff'})
       .build();
     const indicator = new ViewStyle()
       .flex(1)
@@ -141,7 +143,7 @@ class Statistics extends Component {
             type='material-community'
             raised
             size={25}
-            onPress={() => this.displayAlert()} />
+            onPress={() => this.props.workoutState !== 'stopped' ? this.displayAlert() : null} />
           <Icon
             name={this.props.workoutState === 'started' ? 'pause' : 'play'}
             color='black'

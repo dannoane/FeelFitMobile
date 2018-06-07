@@ -23,7 +23,7 @@ export default class Workout extends Component {
         loop={false}
         showsPagination={false}>
         <View style={screen}>
-          <Statistics />
+          <Statistics navigation={this.props.navigation} />
         </View>
         <View style={screen}>
           <Map />
