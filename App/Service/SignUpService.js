@@ -60,9 +60,9 @@ export default class SignUpService {
   async signUp (user) {
 
     try {
-      let result = await axios.post(config.api + '/api/v1/signup', { user });
+      let result = await axios.post(config.api + '/users', user);
 
-      return result.data;
+      return { success: true };
     }
     catch (err) {
       if (err.response.status !== 500) {

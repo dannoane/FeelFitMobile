@@ -7,12 +7,12 @@ export default class LogInService {
   async logIn(username, password) {
 
     try {
-      let result = await axios.post(config.api + '/api/v1/authenticate', {
+      let result = await axios.post(config.api + '/login', {
           username,
           password
       });
 
-      return result.data;
+      return { success: true, token: result.headers.authorization };
     }
     catch (err) {
       if (err.response && err.response.status !== 500) {
