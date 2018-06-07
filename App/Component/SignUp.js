@@ -101,7 +101,7 @@ export default class SignUpScreen extends Component {
           <FormLabel>Email</FormLabel>
           <FormInput placeholder={"Enter your email"}
             value={this.state.email}
-            onChangeText={(username) => this.setState({email})} />
+            onChangeText={(email) => this.setState({email})} />
 
           <FormValidationMessage>{this.state.error}</FormValidationMessage>
 

@@ -24,6 +24,11 @@ class LogIn extends Component {
 
   componentWillMount() {
 
+    this.navigateToMainScreen();
+  }
+
+  navigateToMainScreen() {
+
     const { navigate } = this.props.navigation;
     if (this.props.loggedIn) {
       navigate('Main');
@@ -46,6 +51,7 @@ class LogIn extends Component {
     }
 
     this.setState({loading: false});
+    this.navigateToMainScreen();
   }
 
   render() {
