@@ -46,3 +46,7 @@ export const setActivity = (activity) => ({
   type: 'SET_ACTIVITY',
   value: activity
 });
+
+export const resetWorkout = () => ({
+  type: 'RESET_WORKOUT'
+});

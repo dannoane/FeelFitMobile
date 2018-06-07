@@ -64,6 +64,9 @@ const Route = (state, action) => {
         .set('activity', action.value)
         .set('route', updatedRoute);
     
+    case 'RESET_WORKOUT':
+        return new RouteRecord();
+        
     default:
       return state;
   }
