@@ -131,7 +131,7 @@ export default class WorkoutDetail extends Component {
             strokeColor={color}
             lineCap={'butt'}
             lineJoin={'round'}
-            coordinates={segment.polyline}
+            coordinates={segment.polyline.map(e => ({latitude: e.point[0], longitude: e.point[1]}))}
             geodesic={true} />
         );
     }
@@ -141,7 +141,7 @@ export default class WorkoutDetail extends Component {
         let coords = [];
         this.props.route
             .toJS()
-            .forEach(seg => seg.polyline.forEach(p => coords.push(p)));
+            .forEach(seg => seg.polyline.forEach(p => coords.push({latitude: p.point[0], longitude: p.point[1]})));
 
         return coords;
     }

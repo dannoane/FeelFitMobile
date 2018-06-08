@@ -79,7 +79,7 @@ class Map extends React.Component {
       strokeColor={color}
       lineCap={'butt'}
       lineJoin={'round'}
-      coordinates={segment.polyline}
+      coordinates={segment.polyline.map(e => ({latitude: e.point[0], longitude: e.point[1]}))}
       geodesic={true} />);
   }
 

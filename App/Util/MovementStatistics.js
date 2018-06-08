@@ -134,8 +134,7 @@ const partitionSegmentsByActivity = (segment) => {
 
   for (let i = 0; i < segment.size; ++i) {
     polyline.push({
-      latitude: segment.get(i).latitude,
-      longitude: segment.get(i).longitude,
+      point: [segment.get(i).latitude, segment.get(i).longitude],
       time: segment.get(i).time
     });
 
@@ -148,8 +147,7 @@ const partitionSegmentsByActivity = (segment) => {
     } 
     else if (segment.get(i + 1).activity !== segment.get(i).activity) {
       polyline.push({
-        latitude: segment.get(i + 1).latitude,
-        longitude: segment.get(i + 1).longitude,
+        point: [segment.get(i + 1).latitude, segment.get(i + 1).longitude],
         time: segment.get(i + 1).time
       });
       polylines = polylines.push({
