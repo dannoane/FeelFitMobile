@@ -104,6 +104,11 @@ class Map extends React.Component {
             coordinate={coords}/>
 
           {
+            this.props.followWorkout
+              .map(seg => this.mapSegmentsToPolylines(seg))
+          }
+
+          {
             partitionRouteByActivity(route)
               .map(seg => this.mapSegmentsToPolylines(seg))
               .toJS()
@@ -114,7 +119,8 @@ class Map extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  route: state.Route.get('route')
+  route: state.Route.get('route'),
+  followWorkout: state.Route.get('followWorkout')
 });
 
 const mapDispatchToProps = {};
