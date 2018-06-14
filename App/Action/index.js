@@ -50,3 +50,17 @@ export const setActivity = (activity) => ({
 export const resetWorkout = () => ({
   type: 'RESET_WORKOUT'
 });
+
+export const setWorkoutName = (name) => ({
+  type: 'SET_NAME',
+  value: name
+});
+
+export const setFollowWorkout = (workout) => ({
+  type: 'FOLLOW_WORKOUT',
+  value: workout
+});
+
+export const togglePositionTrack = () => ({
+  type: 'TOGGLE_POSITION_TRACK',
+});
