@@ -118,6 +118,11 @@ export const getAvgPace = (seconds, route) => {
   return `${moment.unix(getAvgPaceInSeconds(seconds, route)).format('mm:ss')}`
 };
 
+export const formatAvgPace = (seconds) => {
+  
+  return `${moment.unix(seconds).format('mm:ss')}`
+}
+
 export const getTime = (seconds) => {
 
   return moment.unix(seconds).subtract(2, 'hours').format('HH:mm:ss');
