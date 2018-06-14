@@ -5,6 +5,14 @@ import { connect } from 'react-redux';
 import ViewStyle from '../Style/ViewStyle';
 import RouteService from '../Service/RouteService';
 import { getTime } from '../Util/MovementStatistics';
+import { 
+    setSearchUsername, 
+    setSearchLocation,
+    setRadius,
+    setSearchActivity,
+    setUserLocation,
+    setFoundWorkouts
+} from '../Action';
 
 class SearchWorkouts extends Component {
 
@@ -13,15 +21,7 @@ class SearchWorkouts extends Component {
         super(props);
 
         this.routeService = new RouteService();
-        this.state = {
-            username: '',
-            location: '',
-            radius: 10,
-            activity: 3,
-            userLocation: false,
-            loading: false,
-            workouts: []
-        };
+        this.state = { loading: false };
     }
 
     async getLocation() {
@@ -64,27 +64,56 @@ class SearchWorkouts extends Component {
     async search() {
 
         this.setState({loading: true});
-        this.setState({workouts: []});
+        this.props.onWorkouts([]);
 
-        let username = this.state.username;
-        let radius = this.state.radius * 1000;
-        let activity = this.state.activity;
+        let username = this.props.username;
+        let radius = this.props.radius * 1000;
+        let activity = this.props.activity;
         let location;
 
-        if (this.userLocation) {
+        if (this.props.userLocation) {
             location = await this.getLocation();
         }
         else {
-            location = await this.getLocationByName(this.state.location);
+            location = await this.getLocationByName(this.props.location);
         }
 
         let result = await this.routeService.search({username, location, radius, activity}, this.props.token);
         
         if (result.success) {
-            this.setState({workouts: result.data});
+            this.props.onWorkouts(result.data);
         }
 
         this.setState({loading: false});
+    }
+
+    mapCodeToActivity(activity) {
+
+        switch (activity) {
+            case 1:
+                return 'Walking';
+            case 2:
+                return 'Running';
+            case 3:
+                return 'Biking';
+            default:
+                return 'Unknown';
+        }
+    } 
+
+    getActivities(workout) {
+
+        let activities = [];
+
+        for (let seg of workout.route) {
+            if (!activities.includes(seg.activity)) {
+                activities.push(seg.activity);
+            }
+        }
+
+        return activities
+            .map(a => this.mapCodeToActivity(a))
+            .join(', ');
     }
 
     showWorkout(workout) {
@@ -123,48 +152,57 @@ class SearchWorkouts extends Component {
                         <FormInput
                             containerStyle={{flex: 1}}
                             placeholder="Username..."
-                            value={this.state.username}
-                            onChangeText={(username) => this.setState({ username })} />
+                            value={this.props.username}
+                            onChangeText={(username) => this.props.onUsername(username)} />
                         {
-                            this.state.userLocation ? (<View/>) : 
+                            this.props.userLocation ? (<View/>) : 
                             (<FormInput
                                 containerStyle={{flex: 1}}
                                 placeholder="Location..."
-                                value={this.state.location}
-                                onChangeText={(location) => this.setState({ location })} />)
+                                value={this.props.location}
+                                onChangeText={(location) => this.props.onLocation(location)} />)
                         }
                     </View>
 
                     <View style={searchItem}>
                         <Picker
-                            selectedValue={this.state.activity}
-                            style={{flex: 1}}
-                            onValueChange={(activity) => this.setState({activity})}>
+                            mode='dropdown'
+                            selectedValue={this.props.activity}
+                            style={{flex: 1, marginLeft: 11}}
+                            itemStyle={{fontWeight: '400'}}
+                            onValueChange={(activity) => this.props.onActivity(activity)}>
                             <Picker.Item label="Walking" value="1" />
                             <Picker.Item label="Running" value="2" />
                             <Picker.Item label="Biking" value="3" />
                         </Picker>
                         <View style={{flex: 1, alignItems: 'stretch', justifyContent: 'center', marginRight: 10}}>
                             <Slider
-                                style={{flex: 1}}
+                                style={{flex: 1, marginLeft: 19, marginRight: 4}}
                                 minimumValue={0.5}
                                 maximumValue={50}
                                 step={0.5}
-                                value={this.state.radius}
-                                onValueChange={(radius) => this.setState({radius})} />
-                            <Text>Radius: {this.state.radius} km</Text>
+                                value={this.props.radius}
+                                onValueChange={(radius) => this.props.onRadius(radius)} />
+                            <Text style={{
+                                marginLeft: 19,
+                                fontWeight: '400'}}>
+                                Radius: {this.props.radius} km
+                            </Text>
                         </View>
                     </View>
 
                     <View style={searchItem}>
                         <View style={{flex: 1, alignItems: 'center'}}>
-                            <Text>My Location</Text>
+                            <Text style={{fontWeight: '400'}}>
+                                My Location
+                            </Text>
                             <Switch
-                                value={this.state.userLocation}
-                                onValueChange={() => this.setState({userLocation: !this.state.userLocation})} />
+                                value={this.props.userLocation}
+                                onValueChange={() => this.props.onUserLocation()} />
                         </View>
                         <Button
                             containerViewStyle={{flex: 1}}
+                            icon={{name: 'search', type: 'material'}}
                             rounded
                             backgroundColor='black'
                             disabled={this.state.loading}
@@ -178,11 +216,15 @@ class SearchWorkouts extends Component {
                 <View style={searchedItems}>
                     <List>
                         {
-                            this.state.workouts.map((item, i) => (
+                            this.props.workouts.map((item, i) => (
                             <ListItem
                                 key={i}
-                                title={item.name}
-                                subtitle={`Distance: ${item.statistics.distance} km  Time: ${getTime(item.statistics.time)}`}
+                                title={`${item.name}`}
+                                titleStyle={{fontWeight: '600', fontSize: 23}}
+                                rightTitle={`${item.statistics.distance} km`}
+                                rightTitleStyle={{fontWeight: '600', fontSize: 20}}
+                                subtitle={`Time: ${getTime(item.statistics.time)}\n${this.getActivities(item)}\nUser: ${item.username}`}
+                                subtitleNumberOfLines={3}
                                 onPress={() => this.showWorkout(item) }
                             />
                             ))
@@ -196,6 +238,21 @@ class SearchWorkouts extends Component {
 
 const mapStateToProps = (state) => ({
     token: state.UserState.get('accessToken'),
+    username: state.Global.get('username'),
+    location: state.Global.get('location'),
+    radius: state.Global.get('radius'),
+    activity: state.Global.get('activity'),
+    userLocation: state.Global.get('userLocation'),
+    workouts: state.Global.get('foundWorkouts')
 });
 
-export default connect(mapStateToProps, {})(SearchWorkouts);
+const mapDispatchToProps = {
+    onUsername: setSearchUsername,
+    onLocation: setSearchLocation,
+    onRadius: setRadius,
+    onActivity: setSearchActivity,
+    onUserLocation: setUserLocation,
+    onWorkouts: setFoundWorkouts
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchWorkouts);

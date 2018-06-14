@@ -64,3 +64,32 @@ export const setFollowWorkout = (workout) => ({
 export const togglePositionTrack = () => ({
   type: 'TOGGLE_POSITION_TRACK',
 });
+
+export const setSearchUsername = (username) => ({
+  type: 'SET_USERNAME',
+  value: username
+});
+
+export const setSearchLocation = (location) => ({
+  type: 'SET_LOCATION',
+  value: location
+});
+
+export const setRadius = (radius) => ({
+  type: 'SET_RADIUS',
+  value: radius
+});
+
+export const setSearchActivity = (activity) => ({
+  type: 'SET_SEARCH_ACTIVITY',
+  value: activity
+});
+
+export const setUserLocation = () => ({
+  type: 'SET_USER_LOCATION'
+});
+
+export const setFoundWorkouts = (foundWorkouts) => ({
+  type: 'SET_FOUND_WORKOUTS',
+  value: foundWorkouts
+});

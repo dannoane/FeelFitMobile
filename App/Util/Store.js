@@ -2,6 +2,7 @@ import throttle from 'lodash/throttle';
 import { createStore, combineReducers } from 'redux';
 import UserState from '../Reducer/UserState';
 import Route from '../Reducer/Route';
+import Global from '../Reducer/Global';
 import Geolocation from './Geolocation';
 import Weather from './Weather';
 import Motion from './Motion';
@@ -19,7 +20,8 @@ const ConfigureStore = () => {
   const persistedState = loadState();
   const bikeApp = combineReducers({
     UserState: UserState,
-    Route: Route
+    Route: Route,
+    Global: Global
   });
   const store = createStore(bikeApp, persistedState);
 
