@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 const UserRecord = Immutable.Record({
-  loggedIn: true,
+  loggedIn: false,
   accessToken: undefined
 });
 
