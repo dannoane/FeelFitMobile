@@ -11,7 +11,7 @@ let magnetometerObservable = null;
 let subscription;
 
 const Motion = async () => {
-
+    return;
     let state = store.getState();
 
     if (state.Route.get('workoutState') === 'started' && !observablesAvailable()) {
