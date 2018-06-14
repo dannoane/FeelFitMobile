@@ -7,7 +7,10 @@ const RouteRecord = Immutable.Record({
   route: Immutable.List(),
   movementData: Immutable.List(),
   weather: {temperature: 0},
-  activity: ''
+  activity: '',
+  name: 'New Workout',
+  track: false,
+  followWorkout: []
 });
 
 const Route = (state, action) => {
@@ -17,6 +20,9 @@ const Route = (state, action) => {
   }
 
   switch (action.type) {
+    case 'SET_NAME':
+      return state.set('name', action.value);
+
     case 'ADD_ROUTE_SEGMENT':
       return state.set('route', state.get('route').push(Immutable.List()));
     
@@ -66,6 +72,12 @@ const Route = (state, action) => {
     
     case 'RESET_WORKOUT':
         return new RouteRecord();
+
+    case 'FOLLOW_WORKOUT':
+        return state.set('followWorkout', action.value);
+
+    case 'TOGGLE_POSITION_TRACK':
+        return state.set('track', !state.get('track'));
         
     default:
       return state;

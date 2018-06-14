@@ -1,7 +1,10 @@
 import { store } from './Store';
-import { addPosition, addMovementData } from './../Action';
+import { addPosition, addMovementData, incrementTime } from './../Action';
+import RouteService from '../Service/RouteService';
 
 let watchId = null;
+let routeService = new RouteService();
+
 const Geolocation = () => {
 
   let route = store.getState().Route;
@@ -12,6 +15,14 @@ const Geolocation = () => {
       let { latitude, longitude, ...movementData } = data.coords;
 
       if (movementData.accuracy <= 30) {
+
+        if (store.getState().Route.get('track')) {
+          routeService.sendMyPosition({
+            location: [latitude, longitude],
+            activity: store.getState().Route.get('activity')
+          }, store.getState().UserState.get('accessToken'));
+        }
+        
         store.dispatch(addPosition({ latitude, longitude }));
         store.dispatch(addMovementData(movementData));
       }
