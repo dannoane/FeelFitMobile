@@ -4,12 +4,14 @@ import SignUp from './../SignUp';
 import { mapNavigationStateParamsToProps } from "./Util/index";
 import MainNavigator from "./MainNavigator";
 import SaveWorkout from '../SaveWorkout';
+import FollowWorkout from '../FollowWorkout';
 
 const RootNavigator = StackNavigator({
     LogIn: { screen: mapNavigationStateParamsToProps(LogIn) },
     SignUp: { screen: mapNavigationStateParamsToProps(SignUp) },
     Main: { screen: MainNavigator },
-    SaveWorkout: { screen: SaveWorkout }
+    SaveWorkout: { screen: SaveWorkout },
+    FollowWorkout: { screen: mapNavigationStateParamsToProps(FollowWorkout) }
   },
   {
     headerMode: 'none',
