@@ -11,6 +11,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
+import com.horcrux.svg.SvgPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RNSensorsPackage(),
             new VectorIconsPackage(),
             new MapsPackage(),
-            new ReactMaterialKitPackage()
+            new ReactMaterialKitPackage(),
+            new SvgPackage()
       );
     }
 
