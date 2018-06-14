@@ -3,7 +3,7 @@ import { AppState, View, Switch, Alert } from 'react-native';
 import { Icon, Divider } from 'react-native-elements';
 import { connect } from 'react-redux';
 import ViewStyle from './../Style/ViewStyle';
-import { addRouteSegment, setWorkoutState } from './../Action';
+import { addRouteSegment, setWorkoutState, togglePositionTrack } from './../Action';
 import { Activity, Altitude, AveragePace, Distance, Speed, Temperature, Time } from './StatisticsComponents';
 import * as Timer from './../Util/Timer';
 
@@ -151,9 +151,15 @@ class Statistics extends Component {
             raised         
             size={30}
             onPress={() => this.toggleWorkout()} />
-          <Switch
-            value={false}
-            onValueChange={() => console.log('ok')} />
+          <View>
+            <Icon
+              name='my-location'
+              type='material'
+              size={20} />
+            <Switch
+              value={this.props.track}
+              onValueChange={() => this.props.onPositionTrack()} />
+          </View>
         </View>
       </View>
     );
@@ -161,12 +167,14 @@ class Statistics extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  workoutState: state.Route.get('workoutState')
+  workoutState: state.Route.get('workoutState'),
+  track: state.Route.get('track')
 });
 
 const mapDispatchToProps = {
   onWorkoutStart: addRouteSegment,
-  onWorkoutStateChange: setWorkoutState
+  onWorkoutStateChange: setWorkoutState,
+  onPositionTrack: togglePositionTrack
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Statistics);
