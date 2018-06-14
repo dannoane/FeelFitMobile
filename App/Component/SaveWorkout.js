@@ -41,6 +41,7 @@ class SaveWorkout extends Component {
 
         let workout = Object.assign({}, {
             username: '',
+            name: this.props.name,
             route: partitionRouteByActivity(this.props.route),
             statistics: {
                 time: this.props.time,
@@ -111,7 +112,7 @@ class SaveWorkout extends Component {
                     minAltitude={getMinAltitude(this.props.movementData)}
                     avgPace={getAvgPace(this.props.time, this.props.route)}
                     temperature={this.props.weather.temperature}
-                    route={partitionRouteByActivity(this.props.route)} />
+                    route={partitionRouteByActivity(this.props.route).toJS()} />
 
                 <View style={buttons}>
                     <Icon
@@ -142,6 +143,7 @@ class SaveWorkout extends Component {
 
 const mapStateToProps = (state) => ({
     token: state.UserState.get('accessToken'),
+    name: state.Route.get('name'),
     time: state.Route.get('time'),
     route: state.Route.get('route'),
     movementData: state.Route.get('movementData'),

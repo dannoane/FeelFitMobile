@@ -2,19 +2,24 @@ import React, { Component } from 'react';
 import { Dimensions, View, Switch, ScrollView } from 'react-native';
 import { Header, Text, List, ListItem, Icon } from 'react-native-elements';
 import MapView from 'react-native-maps';
+import { connect } from 'react-redux';
 import ViewStyle from '../Style/ViewStyle';
 import MapStyle from '../Style/MapStyle';
 import { detailTitleStyle, detailValueStyle } from '../Style/FontStyle';
 import MotionMapper from '../Util/MotionMapper';
+import { setWorkoutName } from '../Action';
 
 let mapPolylineId = 0;
 
-export default class WorkoutDetail extends Component {
+class WorkoutDetail extends Component {
 
     constructor(props) {
         
         super(props);
 
+        this.state = {
+            name: 'New Workout'
+        };
     }
 
     buildList() {
@@ -140,7 +145,6 @@ export default class WorkoutDetail extends Component {
 
         let coords = [];
         this.props.route
-            .toJS()
             .forEach(seg => seg.polyline.forEach(p => coords.push({latitude: p.point[0], longitude: p.point[1]})));
 
         return coords;
@@ -182,7 +186,6 @@ export default class WorkoutDetail extends Component {
                     {
                         this.props.route
                             .map(seg => this.mapSegmentsToPolylines(seg))
-                            .toJS()
                     }
                 </MapView>
 
@@ -192,6 +195,28 @@ export default class WorkoutDetail extends Component {
                     <ScrollView>
                         <List
                             containerStyle={detailsList}>
+                            {
+                                this.props.name === undefined ? 
+                                (<ListItem
+                                    hideChevron={true}
+                                    key={-1}
+                                    title='Name'
+                                    titleStyle={detailTitleStyle}
+                                    leftIcon={{name: 'rename-box', type: 'material-community', color: '#000'}}
+                                    textInputStyle={Object.assign({}, detailValueStyle, {paddingTop: 0, paddingBottom: 0, marginVertical: 3.5})}
+                                    textInput={true}
+                                    textInputValue={this.state.name}
+                                    textInputOnChangeText={(name) => { this.setState({name}); this.props.onWorkoutName(name); } } />) :
+                                (<ListItem
+                                    hideChevron={true}
+                                    key={-1}
+                                    title='Name'
+                                    titleStyle={detailTitleStyle}
+                                    rightTitle={this.props.name}
+                                    rightTitleStyle={detailValueStyle}
+                                    leftIcon={{name: 'rename-box', type: 'material-community', color: '#000'}} />)
+                            }
+
                             {
                                 list.map((item, i) => (
                                     <ListItem
@@ -212,3 +237,11 @@ export default class WorkoutDetail extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = {
+    onWorkoutName: setWorkoutName,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(WorkoutDetail);
