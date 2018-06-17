@@ -47,8 +47,8 @@ class SearchWorkouts extends Component {
 
         if (result.results.length == 0) {
             return {
-                latitude: 47.06667,
-                longitude: 21.93333
+                latitude: 0,
+                longitude: 0
             };
         }
         else {
