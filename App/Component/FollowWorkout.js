@@ -83,6 +83,7 @@ class FollowWorkout extends Component {
                         title='Back'
                         onPress={() => this.goBack()} />
                     <Button
+                        backgroundColor = 'black'
                         title='Follow'
                         onPress={() => this.followWorkout()} />
                 </View>
