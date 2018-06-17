@@ -32,6 +32,10 @@ class Track extends Component {
                 this.setState({
                     users: result.data || []
                 });
+            }, (err) => {
+                console.log(err.message);
+            }, {
+                enableHighAccuracy: true
             });
         }, 5000);
     }
