@@ -72,34 +72,39 @@ export default class SignUpScreen extends Component {
     return (
       <View style={view}>
         <View style={title}>
-          <Text h1>Sign Up</Text>
+          <Text h1 style={{color: 'black'}}>Sign Up</Text>
         </View>
 
         <View style={form}>
-          <FormLabel>Name</FormLabel>
+          <FormLabel labelStyle={{color: 'black'}}>Name</FormLabel>
           <FormInput placeholder={"Enter your name"}
+            inputStyle={{color: 'black'}}
             value={this.state.name}
             onChangeText={(name) => this.setState({name})} />
 
-          <FormLabel>Username</FormLabel>
+          <FormLabel labelStyle={{color: 'black'}}>Username</FormLabel>
           <FormInput placeholder={"Enter your username"}
+            inputStyle={{color: 'black'}}
             value={this.state.username}
             onChangeText={(username) => this.setState({username})} />
 
-          <FormLabel>Password</FormLabel>
+          <FormLabel labelStyle={{color: 'black'}}>Password</FormLabel>
           <FormInput placeholder={"Enter your password"}
+            inputStyle={{color: 'black'}}
             secureTextEntry={true}
             value={this.state.password}
             onChangeText={(password) => this.setState({password})} />
 
-          <FormLabel>Confirm password</FormLabel>
+          <FormLabel labelStyle={{color: 'black'}}>Confirm password</FormLabel>
           <FormInput placeholder={"Reenter your password"}
+            inputStyle={{color: 'black'}}
             secureTextEntry={true}
             value={this.state.repassword}
             onChangeText={(repassword) => this.setState({repassword})} />
 
-          <FormLabel>Email</FormLabel>
+          <FormLabel labelStyle={{color: 'black'}}>Email</FormLabel>
           <FormInput placeholder={"Enter your email"}
+            inputStyle={{color: 'black'}}
             value={this.state.email}
             onChangeText={(email) => this.setState({email})} />
 
@@ -108,6 +113,7 @@ export default class SignUpScreen extends Component {
           <Button
             raised
             icon={{name: 'account-plus', type:'material-community'}}
+            backgroundColor='black'
             fontWeight={'bold'}
             title='Sign Up'
             loading={this.state.loading}
