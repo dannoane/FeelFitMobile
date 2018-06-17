@@ -53,13 +53,13 @@ class MyStatistics extends Component {
         super(props);
 
         let endDate = moment();
-        let startDate = endDate.subtract(7, 'days');
+        let startDate = moment().subtract(7, 'days');
 
         this.routeService = new RouteService();
         this.state = {
             statistics: undefined,
-            startDate: `${startDate.year()}-${startDate.month()}-${startDate.date()}`,
-            endDate: `${endDate.year()}-${endDate.month()}-${endDate.date()}`,
+            startDate: startDate.format('YYYY-MM-DD'),
+            endDate: endDate.format('YYYY-MM-DD'),
             loading: false
         };
     }
