@@ -1,15 +1,36 @@
 import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry, View } from 'react-native';
 import { Provider } from 'react-redux';
-import { store } from '../Util/Store';
+import { storePromise } from '../Util/Store';
 import RootNavigator from './Navigator/RootNavigator';
 
 export default class Root extends Component {
 
+  constructor(props) {
+
+    super(props);
+
+    this.state = {
+      loaded: false
+    };
+
+    this.init();
+  }
+
+  async init() {
+
+    this.store = await storePromise;
+    this.setState({ loaded: true });
+  }
+
   render() {
 
+    if (!this.state.loaded) {
+      return (<View></View>);
+    }
+
     return (
-      <Provider store={store}>
+      <Provider store={this.store}>
         <RootNavigator />
       </Provider>
     );

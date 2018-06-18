@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { store } from './Store';
+import { storePromise } from './Store';
 import { setWeather } from './../Action';
 import WeatherService from './../Service/WeatherService';
 import { getCurrentPosition } from './MovementStatistics';
@@ -10,6 +10,7 @@ let service = new WeatherService();
 
 const Weather = async () => {
 
+  let store = await storePromise;
   let route = store.getState().Route;
 
   if (route.get('workoutState') === 'started' && route.hasLocation) {

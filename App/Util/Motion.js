@@ -1,6 +1,6 @@
 import { Accelerometer, Gyroscope, Magnetometer } from 'react-native-sensors';
 import Rx from 'rxjs/Rx';
-import { store } from './Store';
+import { storePromise } from './Store';
 import { setActivity } from './../Action';
 import MotionService from './../Service/MotionService';
 
@@ -12,6 +12,7 @@ let subscription;
 
 const Motion = async () => {
     return;
+    let store = await storePromise;
     let state = store.getState();
 
     if (state.Route.get('workoutState') === 'started' && !observablesAvailable()) {

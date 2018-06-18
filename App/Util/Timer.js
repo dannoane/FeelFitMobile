@@ -1,21 +1,23 @@
 import { AsyncStorage } from 'react-native';
 import Rx from 'rxjs/Rx';
-import { store } from './Store';
+import { storePromise } from './Store';
 import { incrementTime, setTime } from './../Action';
 
 let initialized = false;
+let store;
 
-const init = () => {
+const init = async () => {
 
   if (!initialized) {
+    
     initTimer();
-
     initialize = true;
   }
 };
 
 const loadTime = async () => {
 
+  store = await storePromise; 
   let time = 0;
   let storedTime = await AsyncStorage.getItem('@time');
   await AsyncStorage.removeItem('@time');

@@ -1,12 +1,13 @@
-import { store } from './Store';
+import { storePromise } from './Store';
 import { addPosition, addMovementData, incrementTime } from './../Action';
 import RouteService from '../Service/RouteService';
 
 let watchId = null;
 let routeService = new RouteService();
 
-const Geolocation = () => {
+const Geolocation = async () => {
 
+  let store = await storePromise;
   let route = store.getState().Route;
 
   if (route.get('workoutState') === 'started' && watchId === null) {
