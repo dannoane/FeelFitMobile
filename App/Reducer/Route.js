@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-const RouteRecord = Immutable.Record({
+export const RouteRecord = Immutable.Record({
   time: 0,
   workoutState: 'stopped',
   hasLocation: false,

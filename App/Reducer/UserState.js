@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-const UserRecord = Immutable.Record({
+export const UserRecord = Immutable.Record({
   loggedIn: false,
   accessToken: undefined
 });

@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-const GlobalRecord = Immutable.Record({
+export const GlobalRecord = Immutable.Record({
     username: '',
     location: '',
     radius: 10,
