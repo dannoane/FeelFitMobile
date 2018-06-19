@@ -3,7 +3,7 @@ import throttle from 'lodash/throttle';
 import { createStore, combineReducers } from 'redux';
 import Immutable from 'immutable';
 import UserState, { UserRecord } from '../Reducer/UserState';
-import Route, { RouteRecord } from '../Reducer/Route';
+import Route, { RouteRecord, TimeRecord } from '../Reducer/Route';
 import Global, { GlobalRecord } from '../Reducer/Global';
 import Geolocation from './Geolocation';
 import Weather from './Weather';
@@ -17,6 +17,7 @@ const loadState = async () => {
 
     if (state !== null) {
       state.UserState = new UserRecord(state.UserState);
+      state.Route.timeArray = Immutable.List(state.Route.timeArray.map(t => new TimeRecord(t)));
       state.Route.route = Immutable.List(state.Route.route).map(seg => Immutable.List(seg));
       state.Route.movementData = Immutable.List(state.Route.movementData);
       state.Route = new RouteRecord(state.Route);
@@ -29,7 +30,7 @@ const loadState = async () => {
     }
   }
   catch (err) {
-    console.warn(err);
+    console.log(err);
   }
 };
 
@@ -39,7 +40,7 @@ const saveState = async (state) => {
     await AsyncStorage.setItem('@FeelFit:state', JSON.stringify(state));
   }
   catch (err) {
-    console.warn(err);
+    console.log(err);
   }
 };
 

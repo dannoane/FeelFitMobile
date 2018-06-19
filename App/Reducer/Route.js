@@ -1,7 +1,13 @@
 import Immutable from 'immutable';
 
+export const TimeRecord = Immutable.Record({
+  start: undefined,
+  end: undefined
+});
+
 export const RouteRecord = Immutable.Record({
   time: 0,
+  timeArray: Immutable.List(),
   workoutState: 'stopped',
   hasLocation: false,
   route: Immutable.List(),
@@ -34,16 +40,25 @@ const Route = (state, action) => {
         .set('hasLocation', true)
         .set('route', route.butLast().push(route.last().push(action.value)));
     
-    case 'INCREMENT_TIME':
-      return state.set('time', state.get('time') + 1);
-    
     case 'SET_TIME':
-      return state.set('time', state.get('time') + action.value);
+      return state.set('time', action.value);
     
     case 'SET_WORKOUT_STATE':
       let hasLocation = action.value !== 'started' ? false : state.get('hasLocation');
+      
+      let newState;
+      let timeArray = state.get('timeArray');
 
-      return state
+      if (action.value === 'started') {
+        newState = state
+          .set('timeArray', timeArray.push(new TimeRecord({ start: Date.now() })));
+      }
+      else {
+        newState = state
+          .set('timeArray', timeArray.butLast().push(timeArray.last().set('end', Date.now())));
+      }
+
+      return newState
         .set('workoutState', action.value)
         .set('hasLocation', hasLocation);
     

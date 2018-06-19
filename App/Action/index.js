@@ -18,10 +18,6 @@ export const addPosition = (position) => ({
   value: position
 });
 
-export const incrementTime = () => ({
-  type: 'INCREMENT_TIME',
-});
-
 export const setTime = (time) => ({
   type: 'SET_TIME',
   value: time

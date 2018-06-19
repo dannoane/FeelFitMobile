@@ -20,30 +20,9 @@ class Statistics extends Component {
     this.initComponent();
   }
 
-  async initComponent() {
+  initComponent() {
 
-    await Timer.loadTime();
     Timer.init();
-  }
-
-  componentDidMount() {
-    AppState.addEventListener('change', this.handleAppStateChange);
-  }
-
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange);
-  }
-
-  handleAppStateChange = async (nextAppState) => {
-
-    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-      await Timer.loadTime();
-    }
-    else if (this.state.appState === 'active' && nextAppState.match(/inactive|background/)) {
-      await Timer.storeTime();
-    }
-
-    this.setState({appState: nextAppState});
   }
 
   toggleWorkout() {
