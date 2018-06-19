@@ -1,5 +1,5 @@
 import { storePromise } from './Store';
-import { addPosition, addMovementData, incrementTime } from './../Action';
+import { addPosition, addMovementData } from './../Action';
 import RouteService from '../Service/RouteService';
 
 let watchId = null;
