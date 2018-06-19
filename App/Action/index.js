@@ -93,3 +93,11 @@ export const setFoundWorkouts = (foundWorkouts) => ({
   type: 'SET_FOUND_WORKOUTS',
   value: foundWorkouts
 });
+
+export const clearUser = () => ({
+  type: 'CLEAR_USER'
+});
+
+export const clearGlobal = () => ({
+  type: 'CLEAR_GLOBAL'
+});

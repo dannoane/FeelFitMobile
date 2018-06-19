@@ -16,6 +16,8 @@ const UserState = (state, action) => {
       return state.set('loggedIn', action.value);
     case 'SET_ACCESS_TOKEN':
       return state.set('accessToken', action.value);
+    case 'CLEAR_USER':
+      return new UserRecord();
     default:
       return state;
   }

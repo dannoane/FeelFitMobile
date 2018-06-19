@@ -29,6 +29,8 @@ const Global = (state, action) => {
             return state.set('userLocation', !state.get('userLocation'));
         case 'SET_FOUND_WORKOUTS':
             return state.set('foundWorkouts', action.value);
+        case 'CLEAR_GLOBAL':
+            return new GlobalRecord();
         default:
             return state;
     }
