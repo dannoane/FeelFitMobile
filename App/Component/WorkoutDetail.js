@@ -145,7 +145,14 @@ class WorkoutDetail extends Component {
 
         let coords = [];
         this.props.route
-            .forEach(seg => seg.polyline.forEach(p => coords.push({latitude: p.point[0], longitude: p.point[1]})));
+            .forEach(seg => {
+                if (seg && seg.polyline) {
+                    seg.polyline.forEach(p => coords.push({
+                        latitude: p.point[0],
+                        longitude: p.point[1]
+                    }));
+                }
+            });
 
         return coords;
     }
@@ -181,7 +188,12 @@ class WorkoutDetail extends Component {
                     customMapStyle={MapStyle}
                     cacheEnabled={true}
                     ref={(ref) => this.mapRef = ref}
-                    onLayout={() => this.mapRef.fitToCoordinates(this.getCoordinates(), { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: true })}>
+                    onLayout={() => {
+                        let coordinates = this.getCoordinates();
+                        if (coordinates && coordinates.length > 9) {
+                            this.mapRef.fitToCoordinates(coordinates, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: true });
+                        }
+                    }}>
 
                     {
                         this.props.route
