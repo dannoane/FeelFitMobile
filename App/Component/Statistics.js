@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AppState, View, Switch, Alert } from 'react-native';
 import { Icon, Divider } from 'react-native-elements';
 import { connect } from 'react-redux';
+import KeepAwake from 'react-native-keep-awake';
 import ViewStyle from './../Style/ViewStyle';
 import { addRouteSegment, setWorkoutState, togglePositionTrack } from './../Action';
 import { Activity, Altitude, AveragePace, Distance, Speed, Temperature, Time } from './StatisticsComponents';
@@ -28,10 +29,12 @@ class Statistics extends Component {
   toggleWorkout() {
 
     if (this.props.workoutState === 'stopped' || this.props.workoutState === 'paused') {
+      changeKeepAwake(true);
       this.props.onWorkoutStateChange('started');
       this.props.onWorkoutStart();
     }
     else {
+      changeKeepAwake(false);
       this.props.onWorkoutStateChange('paused');
     }
   }
@@ -142,6 +145,14 @@ class Statistics extends Component {
         </View>
       </View>
     );
+  }
+}
+
+function changeKeepAwake(shouldBeAwake) {
+  if (shouldBeAwake) {
+    KeepAwake.activate();
+  } else {
+    KeepAwake.deactivate();
   }
 }
 
