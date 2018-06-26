@@ -13,6 +13,7 @@ import com.facebook.soloader.SoLoader;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import com.horcrux.svg.SvgPackage;
 import com.corbt.keepawake.KCKeepAwakePackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,12 +30,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNSensorsPackage(),
-            new VectorIconsPackage(),
-            new MapsPackage(),
-            new ReactMaterialKitPackage(),
-            new SvgPackage(),
-            new KCKeepAwakePackage()
+          new RNSensorsPackage(),
+          new VectorIconsPackage(),
+          new MapsPackage(),
+          new ReactMaterialKitPackage(),
+          new SvgPackage(),
+          new KCKeepAwakePackage(),
+          new ReactNativePushNotificationPackage()
       );
     }
 
