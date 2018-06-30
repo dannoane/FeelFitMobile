@@ -9,10 +9,11 @@ let gyroscopeObservable = null;
 let magnetometerObservable = null;
 
 let subscription;
+let store;
 
 const Motion = async () => {
-    return;
-    let store = await storePromise;
+
+    store = await storePromise;
     let state = store.getState();
 
     if (state.Route.get('workoutState') === 'started' && !observablesAvailable()) {
@@ -31,9 +32,9 @@ function observablesAvailable() {
 
 async function createObservables() {
 
-    accelerationObservable = await new Accelerometer({ updateInterval: 4000 });
-    gyroscopeObservable = await new Gyroscope({ updateInterval: 4000 });
-    magnetometerObservable = await new Magnetometer({ updateInterval: 4000 });
+    accelerationObservable = await new Accelerometer({ updateInterval: 12000 });
+    gyroscopeObservable = await new Gyroscope({ updateInterval: 12000 });
+    magnetometerObservable = await new Magnetometer({ updateInterval: 12000 });
 }
 
 function mergeObservablesAndSubscribe() {
