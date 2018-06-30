@@ -8,6 +8,7 @@ import Global, { GlobalRecord } from '../Reducer/Global';
 import Geolocation from './Geolocation';
 import Weather from './Weather';
 import Motion from './Motion';
+import Voice from './Voice';
 
 const loadState = async () => {
   
@@ -60,6 +61,7 @@ const ConfigureStore = async () => {
   store.subscribe(Geolocation);
   store.subscribe(Weather);
   store.subscribe(Motion);
+  store.subscribe(Voice);
 
   return store;
 };
