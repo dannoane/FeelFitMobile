@@ -140,6 +140,7 @@ dependencies {
     compile ('com.google.android.gms:play-services-gcm:9.2.0') {
         force = true; 
    } 
+    compile project(':react-native-tts')
     compile project(':react-native-push-notification')
     compile project(':react-native-keep-awake')
     compile project(':react-native-svg')
