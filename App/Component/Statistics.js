@@ -97,6 +97,9 @@ class Statistics extends Component {
 
   stopWorkout() {
 
+    changeKeepAwake(false);
+    this.stopNotification();
+    
     this.props.onWorkoutStateChange('stopped');
     this.props.navigation.navigate('SaveWorkout');
   }
