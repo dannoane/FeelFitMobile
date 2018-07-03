@@ -4,7 +4,7 @@ import { storePromise } from './Store';
 import { getDistance, getAvgPaceInSeconds } from './MovementStatistics';
 
 let notifiedStart = false;
-let notifiedStop = false;
+let notifiedStop = true;
 let lastKm = 0;
 
 const Voice = async () => {
@@ -37,8 +37,8 @@ const Voice = async () => {
         let secondsPerKm = avgPace.seconds();
         
         let toSpeak = `Distance: ${distance} kilometers.`;
-        toSpeak += `Time: ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
-        toSpeak += `Average time per kilometer: ${minutesPerKm} minutes, ${secondsPerKm} seconds`;
+        toSpeak += `Time: ${hours} hours, ${minutes} minutes, ${seconds} seconds.`;
+        toSpeak += `Average time per kilometer: ${minutesPerKm} minutes, ${secondsPerKm} seconds.`;
 
         speak(toSpeak);
     }
