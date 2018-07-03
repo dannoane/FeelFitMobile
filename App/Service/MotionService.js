@@ -22,6 +22,8 @@ export default class MotionService {
                         return MotionMapper.RUNNING;
                     case 'biking':
                         return MotionMapper.BIKING;
+                    default:
+                        return 0;
                 }  
             });
 
@@ -84,6 +86,6 @@ export default class MotionService {
             console.log('Cannot reach web service!');
         }
 
-        return null;
+        return 0;
     }
 }
