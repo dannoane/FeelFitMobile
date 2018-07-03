@@ -190,7 +190,7 @@ class WorkoutDetail extends Component {
                     ref={(ref) => this.mapRef = ref}
                     onLayout={() => {
                         let coordinates = this.getCoordinates();
-                        if (coordinates && coordinates.length > 9) {
+                        if (coordinates && coordinates.length > 0) {
                             this.mapRef.fitToCoordinates(coordinates, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: true });
                         }
                     }}>
