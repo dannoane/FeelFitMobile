@@ -74,13 +74,13 @@ export default class LogInService {
                 headers: { Authorization: token }
             });
 
-            return { success: true, data: result.data._embedded.userPositions };
+            return { success: true, data: result.data};
         } 
         catch (err) {
             if (err.response && err.response.status !== 500) {
                 return { success: false, message: err.response.data };
             }
-
+            
             return {
                 success: false,
                 message: 'Cannot reach server!'

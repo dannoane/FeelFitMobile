@@ -68,6 +68,7 @@ function destroyObservables() {
     accelerationObservable = null;
     gyroscopeObservable = null;
     magnetometerObservable = null;
+    subscription = null;
 }
 
 export default Motion;
