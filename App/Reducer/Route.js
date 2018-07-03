@@ -76,6 +76,7 @@ const Route = (state, action) => {
         .map(seg => seg.map(loc => {
           if (!loc.activity) {
             loc.activity = action.value;
+            return Object.assign({}, loc, { activity: action.value });
           }
 
           return loc;
